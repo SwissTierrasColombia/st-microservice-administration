@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: st-microservice-administration
+
+server:
+  port: 7986
+  
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
