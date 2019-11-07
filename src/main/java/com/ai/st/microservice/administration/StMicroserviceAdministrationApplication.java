@@ -6,10 +6,10 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @SpringBootApplication
 @EntityScan({"com.ai.st.entities"})
-public class StMicroserviceAdministration2Application {
+public class StMicroserviceAdministrationApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(StMicroserviceAdministration2Application.class, args);
+		SpringApplication.run(StMicroserviceAdministrationApplication.class, args);
 	}
 
 }
