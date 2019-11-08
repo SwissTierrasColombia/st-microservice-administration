@@ -1,12 +1,17 @@
-package com.ai.st.microservice.administration.controllers.transfers;
+package com.ai.st.microservice.administration.dto;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "UserModel", description = "User")
-public class UserTransfer {
+@ApiModel(value = "UserDto", description = "User")
+public class UserDto implements Serializable {
+
+	private static final long serialVersionUID = -5121529899322990688L;
 
 	@ApiModelProperty(required = true, notes = "User ID")
 	private Long id;
@@ -35,22 +40,11 @@ public class UserTransfer {
 	@ApiModelProperty(required = true, notes = "Update date")
 	private Date updatedAt;
 
-	public UserTransfer() {
+	@ApiModelProperty(required = false, notes = "Roles user")
+	private List<RoleDto> roles;
 
-	}
-
-	public UserTransfer(Long id, String firstName, String lastName, String email, String username, String password,
-			Boolean enabled, Date createdAt, Date updatedAt) {
-		super();
-		this.id = id;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.username = username;
-		this.password = password;
-		this.enabled = enabled;
-		this.createdAt = createdAt;
-		this.updatedAt = updatedAt;
+	public UserDto() {
+		this.roles = new ArrayList<RoleDto>();
 	}
 
 	public Long getId() {
@@ -123,6 +117,14 @@ public class UserTransfer {
 
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+
+	public List<RoleDto> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<RoleDto> roles) {
+		this.roles = roles;
 	}
 
 }

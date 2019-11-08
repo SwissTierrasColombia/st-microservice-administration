@@ -12,9 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ai.st.entities.schema.administration.UserEntity;
 import com.ai.st.microservice.administration.business.UserBusiness;
-import com.ai.st.microservice.administration.controllers.transfers.UserTransfer;
+import com.ai.st.microservice.administration.dto.UserDto;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,43 +32,24 @@ public class UserController {
 	@Autowired
 	private UserBusiness userBusiness;
 
-	@GetMapping("/search")
-	@ApiOperation(value = "Search user by username")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "User found", response = UserTransfer.class),
-			@ApiResponse(code = 404, message = "User Not Found"),
-			@ApiResponse(code = 500, message = "Error Server") })
-	public ResponseEntity<UserTransfer> searchUser(@RequestParam(required = true, name = "username") String username) {
+	@GetMapping("/login")
+	@ApiOperation(value = "Search user by username for login")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "User found", response = UserDto.class),
+			@ApiResponse(code = 404, message = "User Not Found"), @ApiResponse(code = 500, message = "Error Server") })
+	public ResponseEntity<UserDto> searchUser(@RequestParam(required = true, name = "username") String username) {
 
 		HttpStatus httpStatus = null;
-		UserTransfer userTransfer = null;
+		UserDto userDto = null;
 
 		try {
-
-			UserEntity userEntity = userBusiness.getUserByUsername(username);
-
-			if (userEntity instanceof UserEntity) {
-				userTransfer = new UserTransfer();
-				userTransfer.setId(userEntity.getId());
-				userTransfer.setFirstName(userEntity.getFirstName());
-				userTransfer.setLastName(userEntity.getLastName());
-				userTransfer.setEmail(userEntity.getEmail());
-				userTransfer.setUsername(userEntity.getUsername());
-				userTransfer.setEnabled(userEntity.getEnabled());
-				userTransfer.setCreatedAt(userEntity.getCreatedAt());
-				userTransfer.setUpdatedAt(userEntity.getUpdatedAt());
-
-				httpStatus = HttpStatus.OK;
-			} else {
-
-				httpStatus = HttpStatus.NOT_FOUND;
-			}
-
+			userDto = userBusiness.getUserByUsername(username);
+			httpStatus = (userDto instanceof UserDto) ? HttpStatus.OK : HttpStatus.NOT_FOUND;
 		} catch (Exception e) {
 			log.error("Error UserController ---> " + e.getMessage());
 			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
 
-		return new ResponseEntity<>(userTransfer, httpStatus);
+		return new ResponseEntity<>(userDto, httpStatus);
 	}
 
 }
