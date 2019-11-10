@@ -20,4 +20,10 @@ public class UserService implements IUserService {
 		return userRepository.findByUsername(username);
 	}
 
+	@Override
+	@Transactional
+	public UserEntity getUserById(Long id) {
+		return userRepository.findById(id).orElse(null);
+	}
+
 }

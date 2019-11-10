@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,7 +46,27 @@ public class UserController {
 			userDto = userBusiness.getUserByUsername(username);
 			httpStatus = (userDto instanceof UserDto) ? HttpStatus.OK : HttpStatus.NOT_FOUND;
 		} catch (Exception e) {
-			log.error("Error UserController ---> " + e.getMessage());
+			log.error("Error UserController@searchUser ---> " + e.getMessage());
+			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+
+		return new ResponseEntity<>(userDto, httpStatus);
+	}
+
+	@GetMapping("/{id}")
+	@ApiOperation(value = "Get user by id")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "User found", response = UserDto.class),
+			@ApiResponse(code = 404, message = "User Not Found"), @ApiResponse(code = 500, message = "Error Server") })
+	public ResponseEntity<UserDto> getUserById(@PathVariable(required = true, name = "id") Long userId) {
+
+		HttpStatus httpStatus = null;
+		UserDto userDto = null;
+
+		try {
+			userDto = userBusiness.getUserById(userId);
+			httpStatus = (userDto instanceof UserDto) ? HttpStatus.OK : HttpStatus.NOT_FOUND;
+		} catch (Exception e) {
+			log.error("Error UserController@getUserById ---> " + e.getMessage());
 			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
 

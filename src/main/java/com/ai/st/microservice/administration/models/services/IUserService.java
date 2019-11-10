@@ -6,4 +6,6 @@ public interface IUserService {
 
 	public UserEntity getUserByUsername(String username);
 
+	public UserEntity getUserById(Long id);
+
 }
