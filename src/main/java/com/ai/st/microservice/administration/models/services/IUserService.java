@@ -8,4 +8,8 @@ public interface IUserService {
 
 	public UserEntity getUserById(Long id);
 
+	public Long getAllCount();
+
+	public UserEntity createUser(UserEntity user);
+
 }

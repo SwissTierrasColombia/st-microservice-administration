@@ -26,4 +26,14 @@ public class UserService implements IUserService {
 		return userRepository.findById(id).orElse(null);
 	}
 
+	@Override
+	public Long getAllCount() {
+		return userRepository.count();
+	}
+
+	@Override
+	public UserEntity createUser(UserEntity user) {
+		return userRepository.save(user);
+	}
+
 }
