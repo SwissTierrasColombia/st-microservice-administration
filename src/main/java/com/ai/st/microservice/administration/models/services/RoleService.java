@@ -3,7 +3,7 @@ package com.ai.st.microservice.administration.models.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ai.st.entities.schema.administration.RoleEntity;
+import com.ai.st.microservice.administration.entities.RoleEntity;
 import com.ai.st.microservice.administration.models.repositories.RoleRepository;
 
 @Service

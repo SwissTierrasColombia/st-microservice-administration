@@ -3,10 +3,11 @@ package com.ai.st.microservice.administration.business;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.ai.st.entities.schema.administration.RoleEntity;
-import com.ai.st.entities.schema.administration.UserEntity;
+
 import com.ai.st.microservice.administration.dto.RoleDto;
 import com.ai.st.microservice.administration.dto.UserDto;
+import com.ai.st.microservice.administration.entities.RoleEntity;
+import com.ai.st.microservice.administration.entities.UserEntity;
 import com.ai.st.microservice.administration.models.services.IUserService;
 
 @Component

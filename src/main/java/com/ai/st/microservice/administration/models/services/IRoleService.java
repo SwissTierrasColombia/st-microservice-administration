@@ -1,6 +1,6 @@
 package com.ai.st.microservice.administration.models.services;
 
-import com.ai.st.entities.schema.administration.RoleEntity;
+import com.ai.st.microservice.administration.entities.RoleEntity;
 
 public interface IRoleService {
 

@@ -11,9 +11,10 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
-import com.ai.st.entities.schema.administration.RoleEntity;
-import com.ai.st.entities.schema.administration.UserEntity;
+
 import com.ai.st.microservice.administration.business.RoleBusiness;
+import com.ai.st.microservice.administration.entities.RoleEntity;
+import com.ai.st.microservice.administration.entities.UserEntity;
 import com.ai.st.microservice.administration.models.services.IRoleService;
 import com.ai.st.microservice.administration.models.services.IUserService;
 
