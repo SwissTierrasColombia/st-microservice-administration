@@ -71,6 +71,7 @@ public class UserController {
 
 		try {
 			userDto = userBusiness.getUserById(userId);
+			userDto.setPassword("");
 			httpStatus = (userDto instanceof UserDto) ? HttpStatus.OK : HttpStatus.NOT_FOUND;
 		} catch (Exception e) {
 			log.error("Error UserController@getUserById ---> " + e.getMessage());
