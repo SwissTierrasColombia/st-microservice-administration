@@ -51,11 +51,6 @@ public class StMicroserviceAdministrationApplicationStartup implements Applicati
 				roleManager.setName("GESTOR");
 				roleService.createRole(roleManager);
 
-				RoleEntity roleIntegrator = new RoleEntity();
-				roleIntegrator.setId(RoleBusiness.ROLE_INTEGRATOR);
-				roleIntegrator.setName("INTEGRADOR");
-				roleService.createRole(roleIntegrator);
-
 				RoleEntity roleOperator = new RoleEntity();
 				roleOperator.setId(RoleBusiness.ROLE_OPERATOR);
 				roleOperator.setName("OPERADOR");
@@ -79,23 +74,46 @@ public class StMicroserviceAdministrationApplicationStartup implements Applicati
 		if (countUsers == 0) {
 
 			try {
-				UserEntity userToTest = new UserEntity();
-				userToTest.setFirstName("Jhon Freddy");
-				userToTest.setLastName("Rondon Betancourt");
-				userToTest.setCreatedAt(new Date());
-				userToTest.setEmail("jhonfr29@gmail.com");
-				userToTest.setEnabled(true);
-				userToTest.setUsername("jrondon");
-				userToTest.setPassword("$2a$10$C9Dz6U721ss4HsClLNS7EuWfla6nTMfO8gB9XlZbeNXzi6xNivvnC");
+				
+				// User 1
+				
+				UserEntity userToTest1 = new UserEntity();
+				userToTest1.setFirstName("Jhon Freddy");
+				userToTest1.setLastName("Rondon Betancourt");
+				userToTest1.setCreatedAt(new Date());
+				userToTest1.setEmail("jhonfr29@gmail.com");
+				userToTest1.setEnabled(true);
+				userToTest1.setUsername("jrondon");
+				userToTest1.setPassword("$2a$10$C9Dz6U721ss4HsClLNS7EuWfla6nTMfO8gB9XlZbeNXzi6xNivvnC");
 
 				RoleEntity roleAdministrator = roleService.getRoleById(RoleBusiness.ROLE_ADMINISTRATOR);
 				if (roleAdministrator instanceof RoleEntity) {
 					List<RoleEntity> listRoles = new ArrayList<RoleEntity>();
 					listRoles.add(roleAdministrator);
-					userToTest.setRoles(listRoles);
+					userToTest1.setRoles(listRoles);
 				}
 
-				userService.createUser(userToTest);
+				userService.createUser(userToTest1);
+				
+				// User 2
+				
+				UserEntity userToTest2 = new UserEntity();
+				userToTest2.setFirstName("German");
+				userToTest2.setLastName("Carrillo");
+				userToTest2.setCreatedAt(new Date());
+				userToTest2.setEmail("carrillo.german@gmail.com");
+				userToTest2.setEnabled(true);
+				userToTest2.setUsername("gcarrillo");
+				userToTest2.setPassword("$2a$10$C9Dz6U721ss4HsClLNS7EuWfla6nTMfO8gB9XlZbeNXzi6xNivvnC");
+
+				RoleEntity roleProvider = roleService.getRoleById(RoleBusiness.ROLE_SUPPLY_SUPPLIER);
+				if (roleProvider instanceof RoleEntity) {
+					List<RoleEntity> listRoles = new ArrayList<RoleEntity>();
+					listRoles.add(roleProvider);
+					userToTest2.setRoles(listRoles);
+				}
+
+				userService.createUser(userToTest2);
 
 				log.info("The domains 'users' have been loaded!");
 			} catch (Exception e) {
