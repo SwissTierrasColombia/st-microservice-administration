@@ -11,7 +11,6 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
-
 import com.ai.st.microservice.administration.business.RoleBusiness;
 import com.ai.st.microservice.administration.entities.RoleEntity;
 import com.ai.st.microservice.administration.entities.UserEntity;
@@ -74,9 +73,9 @@ public class StMicroserviceAdministrationApplicationStartup implements Applicati
 		if (countUsers == 0) {
 
 			try {
-				
+
 				// User 1
-				
+
 				UserEntity userToTest1 = new UserEntity();
 				userToTest1.setFirstName("Jhon Freddy");
 				userToTest1.setLastName("Rondon Betancourt");
@@ -94,9 +93,9 @@ public class StMicroserviceAdministrationApplicationStartup implements Applicati
 				}
 
 				userService.createUser(userToTest1);
-				
+
 				// User 2
-				
+
 				UserEntity userToTest2 = new UserEntity();
 				userToTest2.setFirstName("German");
 				userToTest2.setLastName("Carrillo");
@@ -106,14 +105,53 @@ public class StMicroserviceAdministrationApplicationStartup implements Applicati
 				userToTest2.setUsername("gcarrillo");
 				userToTest2.setPassword("$2a$10$C9Dz6U721ss4HsClLNS7EuWfla6nTMfO8gB9XlZbeNXzi6xNivvnC");
 
-				RoleEntity roleProvider = roleService.getRoleById(RoleBusiness.ROLE_SUPPLY_SUPPLIER);
-				if (roleProvider instanceof RoleEntity) {
+				RoleEntity roleManager = roleService.getRoleById(RoleBusiness.ROLE_MANAGER);
+				if (roleManager instanceof RoleEntity) {
 					List<RoleEntity> listRoles = new ArrayList<RoleEntity>();
-					listRoles.add(roleProvider);
+					listRoles.add(roleManager);
 					userToTest2.setRoles(listRoles);
 				}
 
 				userService.createUser(userToTest2);
+
+				// User 3
+
+				UserEntity userToTest3 = new UserEntity();
+				userToTest3.setFirstName("Felipe");
+				userToTest3.setLastName("Cano");
+				userToTest3.setCreatedAt(new Date());
+				userToTest3.setEmail("felipecanol@gmail.com");
+				userToTest3.setEnabled(true);
+				userToTest3.setUsername("fcano");
+				userToTest3.setPassword("$2a$10$C9Dz6U721ss4HsClLNS7EuWfla6nTMfO8gB9XlZbeNXzi6xNivvnC");
+
+				if (roleManager instanceof RoleEntity) {
+					List<RoleEntity> listRoles = new ArrayList<RoleEntity>();
+					listRoles.add(roleManager);
+					userToTest3.setRoles(listRoles);
+				}
+
+				userService.createUser(userToTest3);
+
+				// User 4
+
+				UserEntity userToTest4 = new UserEntity();
+				userToTest4.setFirstName("Andres");
+				userToTest4.setLastName("Acosta");
+				userToTest4.setCreatedAt(new Date());
+				userToTest4.setEmail("amacostapulido@gmail.com");
+				userToTest4.setEnabled(true);
+				userToTest4.setUsername("aacosta");
+				userToTest4.setPassword("$2a$10$C9Dz6U721ss4HsClLNS7EuWfla6nTMfO8gB9XlZbeNXzi6xNivvnC");
+
+				RoleEntity roleProvider = roleService.getRoleById(RoleBusiness.ROLE_SUPPLY_SUPPLIER);
+				if (roleProvider instanceof RoleEntity) {
+					List<RoleEntity> listRoles = new ArrayList<RoleEntity>();
+					listRoles.add(roleProvider);
+					userToTest4.setRoles(listRoles);
+				}
+
+				userService.createUser(userToTest4);
 
 				log.info("The domains 'users' have been loaded!");
 			} catch (Exception e) {
