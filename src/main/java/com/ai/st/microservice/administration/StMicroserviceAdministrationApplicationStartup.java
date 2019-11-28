@@ -152,6 +152,25 @@ public class StMicroserviceAdministrationApplicationStartup implements Applicati
 				}
 
 				userService.createUser(userToTest4);
+				
+				// User 5
+
+				UserEntity userToTest5 = new UserEntity();
+				userToTest5.setFirstName("Jonathan");
+				userToTest5.setLastName("Albarracin");
+				userToTest5.setCreatedAt(new Date());
+				userToTest5.setEmail("jonyfido@gmail.com");
+				userToTest5.setEnabled(true);
+				userToTest5.setUsername("jalbarracin");
+				userToTest5.setPassword("$2a$10$C9Dz6U721ss4HsClLNS7EuWfla6nTMfO8gB9XlZbeNXzi6xNivvnC");
+
+				if (roleProvider instanceof RoleEntity) {
+					List<RoleEntity> listRoles = new ArrayList<RoleEntity>();
+					listRoles.add(roleProvider);
+					userToTest5.setRoles(listRoles);
+				}
+
+				userService.createUser(userToTest5);
 
 				log.info("The domains 'users' have been loaded!");
 			} catch (Exception e) {
