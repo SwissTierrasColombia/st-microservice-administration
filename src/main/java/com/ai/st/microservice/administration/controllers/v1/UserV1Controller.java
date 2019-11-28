@@ -1,5 +1,6 @@
-package com.ai.st.microservice.administration.controllers;
+package com.ai.st.microservice.administration.controllers.v1;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -10,15 +11,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ai.st.microservice.administration.business.UserBusiness;
+import com.ai.st.microservice.administration.dto.CreateUserDto;
+import com.ai.st.microservice.administration.dto.ErrorDto;
 import com.ai.st.microservice.administration.dto.UserDto;
-
+import com.ai.st.microservice.administration.exceptions.BusinessException;
+import com.ai.st.microservice.administration.exceptions.InputValidationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.commons.codec.binary.Base64;
@@ -33,7 +38,7 @@ import io.swagger.annotations.ApiResponses;
 @Api(value = "Manage Users", description = "Manage Users", tags = { "Manage Users" })
 @RestController
 @RequestMapping("api/administration/users")
-public class UserController {
+public class UserV1Controller {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -110,6 +115,72 @@ public class UserController {
 		}
 
 		return new ResponseEntity<>(userDto, httpStatus);
+	}
+
+	@PostMapping("")
+	@ApiOperation(value = "Create user")
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "User created", response = UserDto.class),
+			@ApiResponse(code = 500, message = "Error Server") })
+	public ResponseEntity<Object> createUser(@RequestBody CreateUserDto requestCreateUser) {
+
+		HttpStatus httpStatus = null;
+		Object responseDto = null;
+
+		try {
+
+			// validation first name
+			String firstName = requestCreateUser.getFirstName();
+			if (firstName == null || firstName.isEmpty()) {
+				throw new InputValidationException("El nombre es requerido");
+			}
+
+			// validation last name
+			String lastName = requestCreateUser.getLastName();
+			if (lastName == null || lastName.isEmpty()) {
+				throw new InputValidationException("El apellido es requerido");
+			}
+
+			// validation password
+			String password = requestCreateUser.getPassword();
+			if (password == null || password.isEmpty()) {
+				throw new InputValidationException("La contraseña es requerida.");
+			}
+
+			// validation username
+			String username = requestCreateUser.getUsername();
+			if (username == null || username.isEmpty()) {
+				throw new InputValidationException("El nombre de usuario es requerido.");
+			}
+
+			// validation email
+			String email = requestCreateUser.getEmail();
+			if (email == null || email.isEmpty()) {
+				throw new InputValidationException("El correo electrónico es requerido.");
+			}
+
+			List<Long> roles = requestCreateUser.getRoles();
+			if (roles.size() == 0) {
+				throw new InputValidationException("Se debe especificar al menos un rol para el usuario.");
+			}
+
+			responseDto = userBusiness.createUser(firstName, lastName, password, email, username, roles);
+			httpStatus = HttpStatus.OK;
+
+		} catch (InputValidationException e) {
+			log.error("Error UserController@createUser#Validation ---> " + e.getMessage());
+			httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
+			responseDto = new ErrorDto(e.getMessage(), 1);
+		} catch (BusinessException e) {
+			log.error("Error UserController@createUser#Business ---> " + e.getMessage());
+			httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
+			responseDto = new ErrorDto(e.getMessage(), 2);
+		} catch (Exception e) {
+			log.error("Error UserController@createUser#General ---> " + e.getMessage());
+			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+			responseDto = new ErrorDto(e.getMessage(), 3);
+		}
+
+		return new ResponseEntity<>(responseDto, httpStatus);
 	}
 
 }

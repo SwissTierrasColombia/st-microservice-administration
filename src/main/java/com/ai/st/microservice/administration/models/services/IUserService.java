@@ -12,4 +12,6 @@ public interface IUserService {
 
 	public UserEntity createUser(UserEntity user);
 
+	public UserEntity getUserByEmail(String email);
+
 }

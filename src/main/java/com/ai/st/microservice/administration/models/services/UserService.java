@@ -36,4 +36,9 @@ public class UserService implements IUserService {
 		return userRepository.save(user);
 	}
 
+	@Override
+	public UserEntity getUserByEmail(String email) {
+		return userRepository.findByEmail(email);
+	}
+
 }
