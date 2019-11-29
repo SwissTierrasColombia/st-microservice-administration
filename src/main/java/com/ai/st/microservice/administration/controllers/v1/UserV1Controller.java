@@ -37,7 +37,7 @@ import io.swagger.annotations.ApiResponses;
 		RequestMethod.OPTIONS })
 @Api(value = "Manage Users", description = "Manage Users", tags = { "Manage Users" })
 @RestController
-@RequestMapping("api/administration/users")
+@RequestMapping("api/administration/v1/users")
 public class UserV1Controller {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
