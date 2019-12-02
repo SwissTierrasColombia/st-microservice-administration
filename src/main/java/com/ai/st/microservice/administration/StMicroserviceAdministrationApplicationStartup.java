@@ -152,7 +152,7 @@ public class StMicroserviceAdministrationApplicationStartup implements Applicati
 				}
 
 				userService.createUser(userToTest4);
-				
+
 				// User 5
 
 				UserEntity userToTest5 = new UserEntity();
@@ -171,6 +171,23 @@ public class StMicroserviceAdministrationApplicationStartup implements Applicati
 				}
 
 				userService.createUser(userToTest5);
+
+				// User 6
+
+				UserEntity userToTest6 = new UserEntity();
+				userToTest6.setFirstName("Agencia");
+				userToTest6.setLastName("Implementación");
+				userToTest6.setCreatedAt(new Date());
+				userToTest6.setEmail("agenciadeimplementacion@incige.com");
+				userToTest6.setEnabled(true);
+				userToTest6.setUsername("agencia");
+				userToTest6.setPassword("$2a$10$C9Dz6U721ss4HsClLNS7EuWfla6nTMfO8gB9XlZbeNXzi6xNivvnC");
+
+				List<RoleEntity> listRoles = new ArrayList<RoleEntity>();
+				listRoles.add(roleAdministrator);
+				userToTest6.setRoles(listRoles);
+
+				userService.createUser(userToTest6);
 
 				log.info("The domains 'users' have been loaded!");
 			} catch (Exception e) {
