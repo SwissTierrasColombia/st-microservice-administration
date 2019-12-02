@@ -183,4 +183,32 @@ public class UserV1Controller {
 		return new ResponseEntity<>(responseDto, httpStatus);
 	}
 
+	@GetMapping("")
+	@ApiOperation(value = "Get users")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Get users", response = UserDto.class, responseContainer = "List"),
+			@ApiResponse(code = 500, message = "Error Server") })
+	public ResponseEntity<Object> getUsers() {
+
+		Object responseDto = null;
+		HttpStatus httpStatus = null;
+
+		try {
+
+			responseDto = userBusiness.getUsers();
+			httpStatus = HttpStatus.OK;
+
+		} catch (BusinessException e) {
+			log.error("Error UserController@getUsers#Business ---> " + e.getMessage());
+			httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
+			responseDto = new ErrorDto(e.getMessage(), 2);
+		} catch (Exception e) {
+			log.error("Error UserController@getUsers#General ---> " + e.getMessage());
+			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+			responseDto = new ErrorDto(e.getMessage(), 3);
+		}
+
+		return new ResponseEntity<>(responseDto, httpStatus);
+	}
+
 }

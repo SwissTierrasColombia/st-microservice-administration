@@ -148,4 +148,36 @@ public class UserBusiness {
 		return userDto;
 	}
 
+	public List<UserDto> getUsers() throws BusinessException {
+
+		List<UserDto> listUsersDto = new ArrayList<UserDto>();
+
+		List<UserEntity> listUsersEntity = userService.getAllUsers();
+
+		for (UserEntity userEntity : listUsersEntity) {
+
+			UserDto userDto = new UserDto();
+
+			userDto.setId(userEntity.getId());
+			userDto.setFirstName(userEntity.getFirstName());
+			userDto.setLastName(userEntity.getLastName());
+			userDto.setEmail(userEntity.getEmail());
+			userDto.setUsername(userEntity.getUsername());
+			userDto.setEnabled(userEntity.getEnabled());
+			userDto.setCreatedAt(userEntity.getCreatedAt());
+			userDto.setUpdatedAt(userEntity.getUpdatedAt());
+			userDto.setPassword(null);
+
+			if (userEntity.getRoles().size() > 0) {
+				for (RoleEntity roleEntity : userEntity.getRoles()) {
+					userDto.getRoles().add(new RoleDto(roleEntity.getId(), roleEntity.getName()));
+				}
+			}
+
+			listUsersDto.add(userDto);
+		}
+
+		return listUsersDto;
+	}
+
 }

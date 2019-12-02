@@ -1,5 +1,7 @@
 package com.ai.st.microservice.administration.models.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +41,11 @@ public class UserService implements IUserService {
 	@Override
 	public UserEntity getUserByEmail(String email) {
 		return userRepository.findByEmail(email);
+	}
+
+	@Override
+	public List<UserEntity> getAllUsers() {
+		return userRepository.findAll();
 	}
 
 }
