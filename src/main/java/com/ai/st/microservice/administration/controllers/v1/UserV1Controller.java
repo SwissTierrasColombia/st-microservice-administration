@@ -33,9 +33,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE,
-		RequestMethod.OPTIONS })
-@Api(value = "Manage Users", description = "Manage Users", tags = { "Manage Users" })
 @RestController
 @RequestMapping("api/administration/v1/users")
 public class UserV1Controller {
