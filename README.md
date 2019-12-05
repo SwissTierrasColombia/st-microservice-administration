@@ -8,6 +8,29 @@ Users and Roles Administration Microservice.
 $ mvn spring-boot:run
 ```
 
+### How to disable eureka client?
+
+Modify the **enabled** property in st-microservice-administration/src/main/resources/**application.yml** file:
+
+```yml
+eureka:
+  client:
+    enabled: false
+```
+
+### How to disable config client?
+
+Modify the **enabled** property in st-microservice-administration/src/main/resources/**bootstrap.yml** file:
+
+```yml
+spring:
+  application:
+    name: st-microservice-administration
+  cloud:
+    config:
+      enabled: false
+```
+
 ## Running Production
 
 ### Master Branch
