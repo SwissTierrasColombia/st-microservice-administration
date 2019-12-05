@@ -1,6 +1,12 @@
 spring:
-  application:
-    name: st-microservice-administration
+  datasource:
+    url: jdbc:postgresql://localhost:5432/sistema-transicion
+    username: postgres
+    password: 123456
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+    hibernate.ddl-auto: create
     
 eureka:
   client:
