@@ -8,9 +8,11 @@ Users and Roles Administration Microservice.
 $ mvn spring-boot:run
 ```
 
-## Configuration
+## Configuration 
 
-Modify the database connection in the st-microservice-administration/src/main/resources/**application.yml** file
+### Database connection
+
+You must create a database in PostgreSQL with a **scheme** called "**administration**" and then configure the connection data in the st-microservice-administration/src/main/resources/**application.yml** file
 
 ```yml
 spring:
@@ -46,6 +48,10 @@ spring:
     config:
       enabled: false
 ```
+
+## Swagger Documentation?
+
+See [http://localhost:7986/swagger-ui.html](http://localhost:7986/swagger-ui.html)
 
 ## Running Production
 
