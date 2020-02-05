@@ -189,6 +189,23 @@ public class StMicroserviceAdministrationApplicationStartup implements Applicati
 
 				userService.createUser(userToTest6);
 
+				// User 7
+
+				UserEntity userToTest7 = new UserEntity();
+				userToTest7.setFirstName("Jhon Alexander");
+				userToTest7.setLastName("Galindo");
+				userToTest7.setCreatedAt(new Date());
+				userToTest7.setEmail("jhonalex.ue@gmail.com");
+				userToTest7.setEnabled(true);
+				userToTest7.setUsername("jgalindo");
+				userToTest7.setPassword("$2a$10$C9Dz6U721ss4HsClLNS7EuWfla6nTMfO8gB9XlZbeNXzi6xNivvnC");
+
+				List<RoleEntity> listRoles2 = new ArrayList<RoleEntity>();
+				listRoles2.add(roleProvider);
+				userToTest7.setRoles(listRoles2);
+
+				userService.createUser(userToTest7);
+
 				log.info("The domains 'users' have been loaded!");
 			} catch (Exception e) {
 				log.error("Failed to load 'users' domains: " + e.getMessage());
