@@ -8,17 +8,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ai.st.microservice.administration.business.UserBusiness;
+import com.ai.st.microservice.administration.dto.ChangePasswordDto;
 import com.ai.st.microservice.administration.dto.CreateUserDto;
 import com.ai.st.microservice.administration.dto.ErrorDto;
 import com.ai.st.microservice.administration.dto.UserDto;
@@ -28,7 +27,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.commons.codec.binary.Base64;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -139,9 +137,6 @@ public class UserV1Controller {
 
 			// validation password
 			String password = requestCreateUser.getPassword();
-			if (password == null || password.isEmpty()) {
-				throw new InputValidationException("La contraseña es requerida.");
-			}
 
 			// validation username
 			String username = requestCreateUser.getUsername();
@@ -201,6 +196,45 @@ public class UserV1Controller {
 			responseDto = new ErrorDto(e.getMessage(), 2);
 		} catch (Exception e) {
 			log.error("Error UserController@getUsers#General ---> " + e.getMessage());
+			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+			responseDto = new ErrorDto(e.getMessage(), 3);
+		}
+
+		return new ResponseEntity<>(responseDto, httpStatus);
+	}
+
+	@PostMapping("/{id}/reset-password")
+	@ApiOperation(value = "Reset password")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Reset password", response = UserDto.class, responseContainer = "List"),
+			@ApiResponse(code = 500, message = "Error Server") })
+	public ResponseEntity<Object> changePassword(@PathVariable(required = true, name = "id") Long userId,
+			@RequestBody ChangePasswordDto requestChangePassword) {
+
+		Object responseDto = null;
+		HttpStatus httpStatus = null;
+
+		try {
+
+			// validation password
+			String password = requestChangePassword.getPassword();
+			if (password == null || password.isEmpty()) {
+				throw new InputValidationException("La contraseña es requerida.");
+			}
+
+			responseDto = userBusiness.changePassword(userId, password);
+			httpStatus = HttpStatus.OK;
+
+		} catch (InputValidationException e) {
+			log.error("Error UserController@changePassword#Validation ---> " + e.getMessage());
+			httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
+			responseDto = new ErrorDto(e.getMessage(), 1);
+		} catch (BusinessException e) {
+			log.error("Error UserController@changePassword#Business ---> " + e.getMessage());
+			httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
+			responseDto = new ErrorDto(e.getMessage(), 2);
+		} catch (Exception e) {
+			log.error("Error UserController@changePassword#General ---> " + e.getMessage());
 			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 			responseDto = new ErrorDto(e.getMessage(), 3);
 		}

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -117,6 +118,10 @@ public class UserBusiness {
 			throw new BusinessException("Ya existe un usuario con el correo electrónico especificado.");
 		}
 
+		if (password == null || password.isEmpty()) {
+			password = RandomStringUtils.random(6, true, true);
+		}
+
 		UserEntity userEntity = new UserEntity();
 		userEntity.setFirstName(firstName);
 		userEntity.setLastName(lastName);
@@ -178,6 +183,41 @@ public class UserBusiness {
 		}
 
 		return listUsersDto;
+	}
+
+	public UserDto changePassword(Long userId, String newPassword) throws BusinessException {
+
+		UserDto userDto = null;
+
+		UserEntity userEntity = userService.getUserById(userId);
+
+		if (userEntity instanceof UserEntity) {
+
+			userEntity.setPassword(passwordEncode.encode(newPassword));
+			userEntity = userService.createUser(userEntity);
+
+			userDto = new UserDto();
+
+			userDto.setId(userEntity.getId());
+			userDto.setFirstName(userEntity.getFirstName());
+			userDto.setLastName(userEntity.getLastName());
+			userDto.setEmail(userEntity.getEmail());
+			userDto.setUsername(userEntity.getUsername());
+			userDto.setEnabled(userEntity.getEnabled());
+			userDto.setCreatedAt(userEntity.getCreatedAt());
+			userDto.setUpdatedAt(userEntity.getUpdatedAt());
+			userDto.setPassword(null);
+
+			if (userEntity.getRoles().size() > 0) {
+				for (RoleEntity roleEntity : userEntity.getRoles()) {
+					userDto.getRoles().add(new RoleDto(roleEntity.getId(), roleEntity.getName()));
+				}
+			}
+
+		}
+
+		return userDto;
+
 	}
 
 }
