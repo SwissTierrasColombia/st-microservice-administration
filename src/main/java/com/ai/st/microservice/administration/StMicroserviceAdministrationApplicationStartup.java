@@ -63,6 +63,11 @@ public class StMicroserviceAdministrationApplicationStartup implements Applicati
 				roleProvider.setId(RoleBusiness.ROLE_SUPPLY_SUPPLIER);
 				roleProvider.setName("PROVEEDOR INSUMO");
 				roleService.createRole(roleProvider);
+				
+				RoleEntity roleSuper = new RoleEntity();
+				roleSuper.setId(RoleBusiness.ROLE_SUPER_ADMINISTRATOR);
+				roleSuper.setName("SUPER ADMINISTRADOR");
+				roleService.createRole(roleSuper);
 
 				log.info("The domains 'roles' have been loaded!");
 			} catch (Exception e) {
@@ -82,6 +87,7 @@ public class StMicroserviceAdministrationApplicationStartup implements Applicati
 				RoleEntity roleManager = roleService.getRoleById(RoleBusiness.ROLE_MANAGER);
 				RoleEntity roleProvider = roleService.getRoleById(RoleBusiness.ROLE_SUPPLY_SUPPLIER);
 				RoleEntity roleOperator = roleService.getRoleById(RoleBusiness.ROLE_OPERATOR);
+				RoleEntity roleSuper = roleService.getRoleById(RoleBusiness.ROLE_SUPER_ADMINISTRATOR);
 
 				// User 1
 
@@ -179,7 +185,7 @@ public class StMicroserviceAdministrationApplicationStartup implements Applicati
 				userToTest6.setPassword("$2a$10$C9Dz6U721ss4HsClLNS7EuWfla6nTMfO8gB9XlZbeNXzi6xNivvnC");
 
 				List<RoleEntity> listRoles6 = new ArrayList<RoleEntity>();
-				listRoles6.add(roleAdministrator);
+				listRoles6.add(roleSuper);
 				userToTest6.setRoles(listRoles6);
 
 				userService.createUser(userToTest6);
