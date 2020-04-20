@@ -217,7 +217,97 @@ public class UserBusiness {
 		}
 
 		return userDto;
+	}
 
+	public UserDto updateUser(Long userId, String firstName, String lastName) throws BusinessException {
+
+		UserDto userDto = null;
+
+		UserEntity userEntity = userService.getUserById(userId);
+
+		if (!(userEntity instanceof UserEntity)) {
+			throw new BusinessException("No se ha encontrado el usuario");
+		}
+
+		userEntity.setUpdatedAt(new Date());
+		userEntity.setFirstName(firstName);
+		userEntity.setLastName(lastName);
+
+		userEntity = userService.createUser(userEntity);
+
+		userDto = new UserDto();
+
+		userDto.setId(userEntity.getId());
+		userDto.setFirstName(userEntity.getFirstName());
+		userDto.setLastName(userEntity.getLastName());
+		userDto.setEmail(userEntity.getEmail());
+		userDto.setUsername(userEntity.getUsername());
+		userDto.setEnabled(userEntity.getEnabled());
+		userDto.setCreatedAt(userEntity.getCreatedAt());
+		userDto.setUpdatedAt(userEntity.getUpdatedAt());
+		userDto.setPassword(null);
+
+		return userDto;
+	}
+
+	public UserDto enableUser(Long userId) throws BusinessException {
+
+		UserDto userDto = null;
+
+		UserEntity userEntity = userService.getUserById(userId);
+
+		if (!(userEntity instanceof UserEntity)) {
+			throw new BusinessException("No se ha encontrado el usuario");
+		}
+
+		userEntity.setUpdatedAt(new Date());
+		userEntity.setEnabled(true);
+
+		userEntity = userService.createUser(userEntity);
+
+		userDto = new UserDto();
+
+		userDto.setId(userEntity.getId());
+		userDto.setFirstName(userEntity.getFirstName());
+		userDto.setLastName(userEntity.getLastName());
+		userDto.setEmail(userEntity.getEmail());
+		userDto.setUsername(userEntity.getUsername());
+		userDto.setEnabled(userEntity.getEnabled());
+		userDto.setCreatedAt(userEntity.getCreatedAt());
+		userDto.setUpdatedAt(userEntity.getUpdatedAt());
+		userDto.setPassword(null);
+
+		return userDto;
+	}
+
+	public UserDto disableUser(Long userId) throws BusinessException {
+
+		UserDto userDto = null;
+
+		UserEntity userEntity = userService.getUserById(userId);
+
+		if (!(userEntity instanceof UserEntity)) {
+			throw new BusinessException("No se ha encontrado el usuario");
+		}
+
+		userEntity.setUpdatedAt(new Date());
+		userEntity.setEnabled(false);
+
+		userEntity = userService.createUser(userEntity);
+
+		userDto = new UserDto();
+
+		userDto.setId(userEntity.getId());
+		userDto.setFirstName(userEntity.getFirstName());
+		userDto.setLastName(userEntity.getLastName());
+		userDto.setEmail(userEntity.getEmail());
+		userDto.setUsername(userEntity.getUsername());
+		userDto.setEnabled(userEntity.getEnabled());
+		userDto.setCreatedAt(userEntity.getCreatedAt());
+		userDto.setUpdatedAt(userEntity.getUpdatedAt());
+		userDto.setPassword(null);
+
+		return userDto;
 	}
 
 }

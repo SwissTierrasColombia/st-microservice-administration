@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +21,7 @@ import com.ai.st.microservice.administration.business.UserBusiness;
 import com.ai.st.microservice.administration.dto.ChangePasswordDto;
 import com.ai.st.microservice.administration.dto.CreateUserDto;
 import com.ai.st.microservice.administration.dto.ErrorDto;
+import com.ai.st.microservice.administration.dto.UpdateUserDto;
 import com.ai.st.microservice.administration.dto.UserDto;
 import com.ai.st.microservice.administration.exceptions.BusinessException;
 import com.ai.st.microservice.administration.exceptions.InputValidationException;
@@ -235,6 +237,103 @@ public class UserV1Controller {
 			responseDto = new ErrorDto(e.getMessage(), 2);
 		} catch (Exception e) {
 			log.error("Error UserController@changePassword#General ---> " + e.getMessage());
+			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+			responseDto = new ErrorDto(e.getMessage(), 3);
+		}
+
+		return new ResponseEntity<>(responseDto, httpStatus);
+	}
+
+	@PutMapping("/{userId}")
+	@ApiOperation(value = "Update user")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "User updated", response = UserDto.class),
+			@ApiResponse(code = 500, message = "Error Server") })
+	public ResponseEntity<Object> updateUser(@PathVariable Long userId, @RequestBody UpdateUserDto requestUpdateUser) {
+
+		HttpStatus httpStatus = null;
+		Object responseDto = null;
+
+		try {
+
+			// validation first name
+			String firstName = requestUpdateUser.getFirstName();
+			if (firstName == null || firstName.isEmpty()) {
+				throw new InputValidationException("El nombre es requerido");
+			}
+
+			// validation last name
+			String lastName = requestUpdateUser.getLastName();
+			if (lastName == null || lastName.isEmpty()) {
+				throw new InputValidationException("El apellido es requerido");
+			}
+
+			responseDto = userBusiness.updateUser(userId, firstName, lastName);
+			httpStatus = HttpStatus.OK;
+
+		} catch (InputValidationException e) {
+			log.error("Error UserController@updateUser#Validation ---> " + e.getMessage());
+			httpStatus = HttpStatus.BAD_REQUEST;
+			responseDto = new ErrorDto(e.getMessage(), 1);
+		} catch (BusinessException e) {
+			log.error("Error UserController@updateUser#Business ---> " + e.getMessage());
+			httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
+			responseDto = new ErrorDto(e.getMessage(), 2);
+		} catch (Exception e) {
+			log.error("Error UserController@updateUser#General ---> " + e.getMessage());
+			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+			responseDto = new ErrorDto(e.getMessage(), 3);
+		}
+
+		return new ResponseEntity<>(responseDto, httpStatus);
+	}
+
+	@PutMapping("/{userId}/enable")
+	@ApiOperation(value = "Update user")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "User enabled", response = UserDto.class),
+			@ApiResponse(code = 500, message = "Error Server") })
+	public ResponseEntity<Object> enableUser(@PathVariable Long userId) {
+
+		HttpStatus httpStatus = null;
+		Object responseDto = null;
+
+		try {
+
+			responseDto = userBusiness.enableUser(userId);
+			httpStatus = HttpStatus.OK;
+
+		} catch (BusinessException e) {
+			log.error("Error UserController@enableUser#Business ---> " + e.getMessage());
+			httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
+			responseDto = new ErrorDto(e.getMessage(), 2);
+		} catch (Exception e) {
+			log.error("Error UserController@enableUser#General ---> " + e.getMessage());
+			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+			responseDto = new ErrorDto(e.getMessage(), 3);
+		}
+
+		return new ResponseEntity<>(responseDto, httpStatus);
+	}
+
+	@PutMapping("/{userId}/disable")
+	@ApiOperation(value = "Update user")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "User disabled", response = UserDto.class),
+			@ApiResponse(code = 500, message = "Error Server") })
+	public ResponseEntity<Object> disableUser(@PathVariable Long userId) {
+
+		HttpStatus httpStatus = null;
+		Object responseDto = null;
+
+		try {
+
+			responseDto = userBusiness.disableUser(userId);
+			httpStatus = HttpStatus.OK;
+
+		} catch (BusinessException e) {
+			log.error("Error UserController@disableUser#Business ---> " + e.getMessage());
+			httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
+			responseDto = new ErrorDto(e.getMessage(), 2);
+		} catch (Exception e) {
+			log.error("Error UserController@disableUser#General ---> " + e.getMessage());
 			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 			responseDto = new ErrorDto(e.getMessage(), 3);
 		}
