@@ -18,4 +18,6 @@ public interface IUserService {
 
 	public List<UserEntity> getAllUsers();
 
+	public List<UserEntity> getUserByRoles(List<Long> roles);
+
 }

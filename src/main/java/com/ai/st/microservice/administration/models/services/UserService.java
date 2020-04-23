@@ -48,4 +48,9 @@ public class UserService implements IUserService {
 		return userRepository.findAll();
 	}
 
+	@Override
+	public List<UserEntity> getUserByRoles(List<Long> roles) {
+		return userRepository.getUserByRoles(roles);
+	}
+
 }

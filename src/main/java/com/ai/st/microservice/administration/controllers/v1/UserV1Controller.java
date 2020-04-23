@@ -182,14 +182,19 @@ public class UserV1Controller {
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Get users", response = UserDto.class, responseContainer = "List"),
 			@ApiResponse(code = 500, message = "Error Server") })
-	public ResponseEntity<Object> getUsers() {
+	public ResponseEntity<Object> getUsers(@RequestParam(name = "roles", required = false) List<Long> roles) {
 
 		Object responseDto = null;
 		HttpStatus httpStatus = null;
 
 		try {
 
-			responseDto = userBusiness.getUsers();
+			if (roles != null && roles.size() > 0) {
+				responseDto = userBusiness.getUsersByRoles(roles);
+			} else {
+				responseDto = userBusiness.getUsers();
+			}
+
 			httpStatus = HttpStatus.OK;
 
 		} catch (BusinessException e) {
