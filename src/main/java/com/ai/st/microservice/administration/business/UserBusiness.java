@@ -308,6 +308,12 @@ public class UserBusiness {
 		userDto.setCreatedAt(userEntity.getCreatedAt());
 		userDto.setUpdatedAt(userEntity.getUpdatedAt());
 		userDto.setPassword(null);
+		
+		if (userEntity.getRoles().size() > 0) {
+			for (RoleEntity roleEntity : userEntity.getRoles()) {
+				userDto.getRoles().add(new RoleDto(roleEntity.getId(), roleEntity.getName()));
+			}
+		}
 
 		return userDto;
 	}
@@ -338,6 +344,12 @@ public class UserBusiness {
 		userDto.setCreatedAt(userEntity.getCreatedAt());
 		userDto.setUpdatedAt(userEntity.getUpdatedAt());
 		userDto.setPassword(null);
+		
+		if (userEntity.getRoles().size() > 0) {
+			for (RoleEntity roleEntity : userEntity.getRoles()) {
+				userDto.getRoles().add(new RoleDto(roleEntity.getId(), roleEntity.getName()));
+			}
+		}
 
 		return userDto;
 	}
