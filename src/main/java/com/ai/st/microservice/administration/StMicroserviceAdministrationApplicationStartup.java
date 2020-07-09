@@ -63,7 +63,7 @@ public class StMicroserviceAdministrationApplicationStartup implements Applicati
 				roleProvider.setId(RoleBusiness.ROLE_SUPPLY_SUPPLIER);
 				roleProvider.setName("PROVEEDOR INSUMO");
 				roleService.createRole(roleProvider);
-				
+
 				RoleEntity roleSuper = new RoleEntity();
 				roleSuper.setId(RoleBusiness.ROLE_SUPER_ADMINISTRATOR);
 				roleSuper.setName("SUPER ADMINISTRADOR");
@@ -224,6 +224,39 @@ public class StMicroserviceAdministrationApplicationStartup implements Applicati
 				userToTest8.setRoles(listRoles8);
 
 				userService.createUser(userToTest8);
+
+				// User 9
+
+				UserEntity userToTest9 = new UserEntity();
+				userToTest9.setFirstName("Andres");
+				userToTest9.setLastName("Guarin");
+				userToTest9.setCreatedAt(new Date());
+				userToTest9.setEmail("aguarin@gmail.com");
+				userToTest9.setEnabled(true);
+				userToTest9.setUsername("aguarin");
+				userToTest9.setPassword("$2a$10$C9Dz6U721ss4HsClLNS7EuWfla6nTMfO8gB9XlZbeNXzi6xNivvnC");
+
+				List<RoleEntity> listRoles9 = new ArrayList<RoleEntity>();
+				listRoles9.add(roleProvider);
+				userToTest9.setRoles(listRoles9);
+
+				userService.createUser(userToTest9);
+				
+				// User 10
+				UserEntity userToTest10 = new UserEntity();
+				userToTest10.setFirstName("Yesid");
+				userToTest10.setLastName("Polanía");
+				userToTest10.setCreatedAt(new Date());
+				userToTest10.setEmail("ypolania@gmail.com");
+				userToTest10.setEnabled(true);
+				userToTest10.setUsername("ypolania");
+				userToTest10.setPassword("$2a$10$C9Dz6U721ss4HsClLNS7EuWfla6nTMfO8gB9XlZbeNXzi6xNivvnC");
+
+				List<RoleEntity> listRoles10 = new ArrayList<RoleEntity>();
+				listRoles10.add(roleProvider);
+				userToTest10.setRoles(listRoles10);
+
+				userService.createUser(userToTest10);
 
 				log.info("The domains 'users' have been loaded!");
 			} catch (Exception e) {
