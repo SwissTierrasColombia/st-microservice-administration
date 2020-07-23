@@ -129,7 +129,7 @@ public class StMicroserviceAdministrationApplicationStartup implements Applicati
 				userToTest3.setFirstName("Felipe");
 				userToTest3.setLastName("Cano");
 				userToTest3.setCreatedAt(new Date());
-				userToTest3.setEmail("felipecanol@gmail.com");
+				userToTest3.setEmail("felipetest@gmail.com");
 				userToTest3.setEnabled(true);
 				userToTest3.setUsername("fcano");
 				userToTest3.setPassword("$2a$10$C9Dz6U721ss4HsClLNS7EuWfla6nTMfO8gB9XlZbeNXzi6xNivvnC");
