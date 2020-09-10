@@ -83,180 +83,24 @@ public class StMicroserviceAdministrationApplicationStartup implements Applicati
 
 			try {
 
-				RoleEntity roleAdministrator = roleService.getRoleById(RoleBusiness.ROLE_ADMINISTRATOR);
-				RoleEntity roleManager = roleService.getRoleById(RoleBusiness.ROLE_MANAGER);
-				RoleEntity roleProvider = roleService.getRoleById(RoleBusiness.ROLE_SUPPLY_SUPPLIER);
-				RoleEntity roleOperator = roleService.getRoleById(RoleBusiness.ROLE_OPERATOR);
 				RoleEntity roleSuper = roleService.getRoleById(RoleBusiness.ROLE_SUPER_ADMINISTRATOR);
 
 				// User 1
 
 				UserEntity userToTest1 = new UserEntity();
-				userToTest1.setFirstName("Agencia");
-				userToTest1.setLastName("Implementación");
+				userToTest1.setFirstName("Super");
+				userToTest1.setLastName("Administración");
 				userToTest1.setCreatedAt(new Date());
-				userToTest1.setEmail("agenciadeimplementacion@incige.com");
+				userToTest1.setEmail("root@st.com");
 				userToTest1.setEnabled(true);
-				userToTest1.setUsername("agencia");
+				userToTest1.setUsername("root");
 				userToTest1.setPassword("$2a$10$C9Dz6U721ss4HsClLNS7EuWfla6nTMfO8gB9XlZbeNXzi6xNivvnC");
 
 				List<RoleEntity> listRoles1 = new ArrayList<RoleEntity>();
-				listRoles1.add(roleAdministrator);
+				listRoles1.add(roleSuper);
 				userToTest1.setRoles(listRoles1);
 
 				userService.createUser(userToTest1);
-
-				// User 2
-
-				UserEntity userToTest2 = new UserEntity();
-				userToTest2.setFirstName("German");
-				userToTest2.setLastName("Carrillo");
-				userToTest2.setCreatedAt(new Date());
-				userToTest2.setEmail("carrillo.german@gmail.com");
-				userToTest2.setEnabled(true);
-				userToTest2.setUsername("gcarrillo");
-				userToTest2.setPassword("$2a$10$C9Dz6U721ss4HsClLNS7EuWfla6nTMfO8gB9XlZbeNXzi6xNivvnC");
-
-				List<RoleEntity> listRoles2 = new ArrayList<RoleEntity>();
-				listRoles2.add(roleManager);
-				userToTest2.setRoles(listRoles2);
-
-				userService.createUser(userToTest2);
-
-				// User 3
-
-				UserEntity userToTest3 = new UserEntity();
-				userToTest3.setFirstName("Felipe");
-				userToTest3.setLastName("Cano");
-				userToTest3.setCreatedAt(new Date());
-				userToTest3.setEmail("felipetest@gmail.com");
-				userToTest3.setEnabled(true);
-				userToTest3.setUsername("fcano");
-				userToTest3.setPassword("$2a$10$C9Dz6U721ss4HsClLNS7EuWfla6nTMfO8gB9XlZbeNXzi6xNivvnC");
-
-				List<RoleEntity> listRoles3 = new ArrayList<RoleEntity>();
-				listRoles3.add(roleManager);
-				userToTest3.setRoles(listRoles3);
-
-				userService.createUser(userToTest3);
-
-				// User 4
-
-				UserEntity userToTest4 = new UserEntity();
-				userToTest4.setFirstName("Andres");
-				userToTest4.setLastName("Acosta");
-				userToTest4.setCreatedAt(new Date());
-				userToTest4.setEmail("amacostapulido@gmail.com");
-				userToTest4.setEnabled(true);
-				userToTest4.setUsername("aacosta");
-				userToTest4.setPassword("$2a$10$C9Dz6U721ss4HsClLNS7EuWfla6nTMfO8gB9XlZbeNXzi6xNivvnC");
-
-				List<RoleEntity> listRoles4 = new ArrayList<RoleEntity>();
-				listRoles4.add(roleProvider);
-				userToTest4.setRoles(listRoles4);
-
-				userService.createUser(userToTest4);
-
-				// User 5
-
-				UserEntity userToTest5 = new UserEntity();
-				userToTest5.setFirstName("Jonathan");
-				userToTest5.setLastName("Albarracin");
-				userToTest5.setCreatedAt(new Date());
-				userToTest5.setEmail("jonyfido@gmail.com");
-				userToTest5.setEnabled(true);
-				userToTest5.setUsername("jalbarracin");
-				userToTest5.setPassword("$2a$10$C9Dz6U721ss4HsClLNS7EuWfla6nTMfO8gB9XlZbeNXzi6xNivvnC");
-
-				List<RoleEntity> listRoles5 = new ArrayList<RoleEntity>();
-				listRoles5.add(roleProvider);
-				userToTest5.setRoles(listRoles5);
-
-				userService.createUser(userToTest5);
-
-				// User 6
-				UserEntity userToTest6 = new UserEntity();
-				userToTest6.setFirstName("Jhon Freddy");
-				userToTest6.setLastName("Rondon Betancourt");
-				userToTest6.setCreatedAt(new Date());
-				userToTest6.setEmail("jhonfr29@gmail.com");
-				userToTest6.setEnabled(true);
-				userToTest6.setUsername("jrondon");
-				userToTest6.setPassword("$2a$10$C9Dz6U721ss4HsClLNS7EuWfla6nTMfO8gB9XlZbeNXzi6xNivvnC");
-
-				List<RoleEntity> listRoles6 = new ArrayList<RoleEntity>();
-				listRoles6.add(roleSuper);
-				userToTest6.setRoles(listRoles6);
-
-				userService.createUser(userToTest6);
-
-				// User 7
-
-				UserEntity userToTest7 = new UserEntity();
-				userToTest7.setFirstName("Jhon Alexander");
-				userToTest7.setLastName("Galindo");
-				userToTest7.setCreatedAt(new Date());
-				userToTest7.setEmail("jhonalex.ue@gmail.com");
-				userToTest7.setEnabled(true);
-				userToTest7.setUsername("jgalindo");
-				userToTest7.setPassword("$2a$10$C9Dz6U721ss4HsClLNS7EuWfla6nTMfO8gB9XlZbeNXzi6xNivvnC");
-
-				List<RoleEntity> listRoles7 = new ArrayList<RoleEntity>();
-				listRoles7.add(roleProvider);
-				userToTest7.setRoles(listRoles7);
-
-				userService.createUser(userToTest7);
-
-				// User 8
-
-				UserEntity userToTest8 = new UserEntity();
-				userToTest8.setId((long) 10);
-				userToTest8.setFirstName("Leonardo");
-				userToTest8.setLastName("Cardona");
-				userToTest8.setCreatedAt(new Date());
-				userToTest8.setEmail("leocardonapiedrahita@gmail.com");
-				userToTest8.setEnabled(true);
-				userToTest8.setUsername("lcardona");
-				userToTest8.setPassword("$2a$10$C9Dz6U721ss4HsClLNS7EuWfla6nTMfO8gB9XlZbeNXzi6xNivvnC");
-
-				List<RoleEntity> listRoles8 = new ArrayList<RoleEntity>();
-				listRoles8.add(roleOperator);
-				userToTest8.setRoles(listRoles8);
-
-				userService.createUser(userToTest8);
-
-				// User 9
-
-				UserEntity userToTest9 = new UserEntity();
-				userToTest9.setFirstName("Andres");
-				userToTest9.setLastName("Guarin");
-				userToTest9.setCreatedAt(new Date());
-				userToTest9.setEmail("aguarin@gmail.com");
-				userToTest9.setEnabled(true);
-				userToTest9.setUsername("aguarin");
-				userToTest9.setPassword("$2a$10$C9Dz6U721ss4HsClLNS7EuWfla6nTMfO8gB9XlZbeNXzi6xNivvnC");
-
-				List<RoleEntity> listRoles9 = new ArrayList<RoleEntity>();
-				listRoles9.add(roleProvider);
-				userToTest9.setRoles(listRoles9);
-
-				userService.createUser(userToTest9);
-				
-				// User 10
-				UserEntity userToTest10 = new UserEntity();
-				userToTest10.setFirstName("Yesid");
-				userToTest10.setLastName("Polanía");
-				userToTest10.setCreatedAt(new Date());
-				userToTest10.setEmail("ypolania@gmail.com");
-				userToTest10.setEnabled(true);
-				userToTest10.setUsername("ypolania");
-				userToTest10.setPassword("$2a$10$C9Dz6U721ss4HsClLNS7EuWfla6nTMfO8gB9XlZbeNXzi6xNivvnC");
-
-				List<RoleEntity> listRoles10 = new ArrayList<RoleEntity>();
-				listRoles10.add(roleProvider);
-				userToTest10.setRoles(listRoles10);
-
-				userService.createUser(userToTest10);
 
 				log.info("The domains 'users' have been loaded!");
 			} catch (Exception e) {
