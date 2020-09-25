@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.ai.st.microservice.administration.business.RoleBusiness;
@@ -24,6 +25,12 @@ public class StMicroserviceAdministrationApplicationStartup implements Applicati
 	@Value("${spring.profiles.active}")
 	private String activeProfile;
 
+	@Value("${st.root.username}")
+	private String rootUsername;
+
+	@Value("${st.root.password}")
+	private String rootPassword;
+
 	private static final Logger log = LoggerFactory.getLogger(StMicroserviceAdministrationApplicationStartup.class);
 
 	@Autowired
@@ -31,6 +38,9 @@ public class StMicroserviceAdministrationApplicationStartup implements Applicati
 
 	@Autowired
 	private IUserService userService;
+
+	@Autowired
+	private BCryptPasswordEncoder passwordEncode;
 
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -93,8 +103,8 @@ public class StMicroserviceAdministrationApplicationStartup implements Applicati
 				userToTest1.setCreatedAt(new Date());
 				userToTest1.setEmail("root@st.com");
 				userToTest1.setEnabled(true);
-				userToTest1.setUsername("root");
-				userToTest1.setPassword("$2a$10$C9Dz6U721ss4HsClLNS7EuWfla6nTMfO8gB9XlZbeNXzi6xNivvnC");
+				userToTest1.setUsername(rootUsername);
+				userToTest1.setPassword(passwordEncode.encode(rootPassword));
 
 				List<RoleEntity> listRoles1 = new ArrayList<RoleEntity>();
 				listRoles1.add(roleSuper);
