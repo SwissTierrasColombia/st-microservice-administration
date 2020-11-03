@@ -112,12 +112,6 @@ public class UserBusiness {
 			throw new BusinessException("Ya existe un usuario con el nombre de usuario especificado.");
 		}
 
-		// validation email
-		UserEntity userEmailEntity = userService.getUserByEmail(email);
-		if (userEmailEntity instanceof UserEntity) {
-			throw new BusinessException("Ya existe un usuario con el correo electrónico especificado.");
-		}
-
 		if (password == null || password.isEmpty()) {
 			password = RandomStringUtils.random(6, true, true);
 		}
