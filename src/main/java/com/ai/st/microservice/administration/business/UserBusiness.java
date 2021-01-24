@@ -1,17 +1,20 @@
 package com.ai.st.microservice.administration.business;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.ai.st.microservice.administration.dto.RoleDto;
 import com.ai.st.microservice.administration.dto.UserDto;
+import com.ai.st.microservice.administration.entities.CodeEntity;
 import com.ai.st.microservice.administration.entities.RoleEntity;
 import com.ai.st.microservice.administration.entities.UserEntity;
 import com.ai.st.microservice.administration.exceptions.BusinessException;
@@ -29,6 +32,12 @@ public class UserBusiness {
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncode;
+
+	@Autowired
+	private CodeBusiness codeBusiness;
+
+	@Autowired
+	private NotificationBusiness notificationBusiness;
 
 	public UserDto getUserByUsername(String username) {
 
@@ -302,7 +311,7 @@ public class UserBusiness {
 		userDto.setCreatedAt(userEntity.getCreatedAt());
 		userDto.setUpdatedAt(userEntity.getUpdatedAt());
 		userDto.setPassword(null);
-		
+
 		if (userEntity.getRoles().size() > 0) {
 			for (RoleEntity roleEntity : userEntity.getRoles()) {
 				userDto.getRoles().add(new RoleDto(roleEntity.getId(), roleEntity.getName()));
@@ -338,7 +347,7 @@ public class UserBusiness {
 		userDto.setCreatedAt(userEntity.getCreatedAt());
 		userDto.setUpdatedAt(userEntity.getUpdatedAt());
 		userDto.setPassword(null);
-		
+
 		if (userEntity.getRoles().size() > 0) {
 			for (RoleEntity roleEntity : userEntity.getRoles()) {
 				userDto.getRoles().add(new RoleDto(roleEntity.getId(), roleEntity.getName()));
@@ -346,6 +355,69 @@ public class UserBusiness {
 		}
 
 		return userDto;
+	}
+
+	public void recoverAccount(String email) throws BusinessException {
+
+		UserEntity userEntity = userService.getUserByEmail(email);
+
+		if (!(userEntity instanceof UserEntity)) {
+			throw new BusinessException("No existe un usuario registrado con el correo electrónico especificado.");
+		}
+
+		boolean result = codeBusiness.unavailableCodesByUser(userEntity.getId());
+		if (!result) {
+			throw new BusinessException("No se ha podido generar las instrucciones de recuperación de cuenta.");
+		}
+
+		int addMinuteTime = 10;
+		Date targetTime = new Date();
+		targetTime = DateUtils.addMinutes(targetTime, addMinuteTime);
+
+		CodeEntity codeEntity = codeBusiness.createCode(userEntity, targetTime);
+		if (codeEntity == null) {
+			throw new BusinessException("No se ha podido generar las instrucciones de recuperación de cuenta.");
+		}
+
+		String pattern = "yyyy-MM-dd HH:mm:ss";
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+		String date = simpleDateFormat.format(codeEntity.getExpiredAt());
+
+		// send email
+		notificationBusiness.sendNotificationRecoverAccount(email, codeEntity.getCode(), date, userEntity.getId());
+	}
+
+	public void resetAccount(String email, String code, String password) throws BusinessException {
+
+		UserEntity userEntity = userService.getUserByEmail(email);
+
+		if (!(userEntity instanceof UserEntity)) {
+			throw new BusinessException("No existe un usuario registrado con el correo electrónico especificado.");
+		}
+
+		CodeEntity codeEntity = codeBusiness.getOTPByCodeAndUser(code, userEntity);
+
+		if (codeEntity == null) {
+			throw new BusinessException("El código OTP es inválido.");
+		}
+
+		if (codeEntity.getAvailable() == false) {
+			throw new BusinessException("El código OTP es inválido.");
+		}
+
+		if (password.length() <= 5) {
+			throw new BusinessException("La nueva contraseña debe tener mínimo 6 caracteres.");
+		}
+
+		// validate expiration date
+		Date now = new Date();
+		if (now.after(codeEntity.getExpiredAt())) {
+			throw new BusinessException("El código OTP ha expirado!.");
+		}
+
+		changePassword(userEntity.getId(), password);
+
+		codeBusiness.unavailableCodesByUser(userEntity.getId());
 	}
 
 }

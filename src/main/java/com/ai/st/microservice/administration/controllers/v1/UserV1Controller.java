@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ai.st.microservice.administration.business.UserBusiness;
 import com.ai.st.microservice.administration.dto.ChangePasswordDto;
 import com.ai.st.microservice.administration.dto.CreateUserDto;
-import com.ai.st.microservice.administration.dto.ErrorDto;
+import com.ai.st.microservice.administration.dto.BasicResponseDto;
+import com.ai.st.microservice.administration.dto.RecoverAccountDto;
+import com.ai.st.microservice.administration.dto.ResetAccountDto;
 import com.ai.st.microservice.administration.dto.UpdateUserDto;
 import com.ai.st.microservice.administration.dto.UserDto;
 import com.ai.st.microservice.administration.exceptions.BusinessException;
@@ -163,15 +165,15 @@ public class UserV1Controller {
 		} catch (InputValidationException e) {
 			log.error("Error UserController@createUser#Validation ---> " + e.getMessage());
 			httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
-			responseDto = new ErrorDto(e.getMessage(), 1);
+			responseDto = new BasicResponseDto(e.getMessage(), 1);
 		} catch (BusinessException e) {
 			log.error("Error UserController@createUser#Business ---> " + e.getMessage());
 			httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
-			responseDto = new ErrorDto(e.getMessage(), 2);
+			responseDto = new BasicResponseDto(e.getMessage(), 2);
 		} catch (Exception e) {
 			log.error("Error UserController@createUser#General ---> " + e.getMessage());
 			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-			responseDto = new ErrorDto(e.getMessage(), 3);
+			responseDto = new BasicResponseDto(e.getMessage(), 3);
 		}
 
 		return new ResponseEntity<>(responseDto, httpStatus);
@@ -200,11 +202,11 @@ public class UserV1Controller {
 		} catch (BusinessException e) {
 			log.error("Error UserController@getUsers#Business ---> " + e.getMessage());
 			httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
-			responseDto = new ErrorDto(e.getMessage(), 2);
+			responseDto = new BasicResponseDto(e.getMessage(), 2);
 		} catch (Exception e) {
 			log.error("Error UserController@getUsers#General ---> " + e.getMessage());
 			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-			responseDto = new ErrorDto(e.getMessage(), 3);
+			responseDto = new BasicResponseDto(e.getMessage(), 3);
 		}
 
 		return new ResponseEntity<>(responseDto, httpStatus);
@@ -235,15 +237,15 @@ public class UserV1Controller {
 		} catch (InputValidationException e) {
 			log.error("Error UserController@changePassword#Validation ---> " + e.getMessage());
 			httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
-			responseDto = new ErrorDto(e.getMessage(), 1);
+			responseDto = new BasicResponseDto(e.getMessage(), 1);
 		} catch (BusinessException e) {
 			log.error("Error UserController@changePassword#Business ---> " + e.getMessage());
 			httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
-			responseDto = new ErrorDto(e.getMessage(), 2);
+			responseDto = new BasicResponseDto(e.getMessage(), 2);
 		} catch (Exception e) {
 			log.error("Error UserController@changePassword#General ---> " + e.getMessage());
 			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-			responseDto = new ErrorDto(e.getMessage(), 3);
+			responseDto = new BasicResponseDto(e.getMessage(), 3);
 		}
 
 		return new ResponseEntity<>(responseDto, httpStatus);
@@ -278,15 +280,15 @@ public class UserV1Controller {
 		} catch (InputValidationException e) {
 			log.error("Error UserController@updateUser#Validation ---> " + e.getMessage());
 			httpStatus = HttpStatus.BAD_REQUEST;
-			responseDto = new ErrorDto(e.getMessage(), 1);
+			responseDto = new BasicResponseDto(e.getMessage(), 1);
 		} catch (BusinessException e) {
 			log.error("Error UserController@updateUser#Business ---> " + e.getMessage());
 			httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
-			responseDto = new ErrorDto(e.getMessage(), 2);
+			responseDto = new BasicResponseDto(e.getMessage(), 2);
 		} catch (Exception e) {
 			log.error("Error UserController@updateUser#General ---> " + e.getMessage());
 			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-			responseDto = new ErrorDto(e.getMessage(), 3);
+			responseDto = new BasicResponseDto(e.getMessage(), 3);
 		}
 
 		return new ResponseEntity<>(responseDto, httpStatus);
@@ -309,11 +311,11 @@ public class UserV1Controller {
 		} catch (BusinessException e) {
 			log.error("Error UserController@enableUser#Business ---> " + e.getMessage());
 			httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
-			responseDto = new ErrorDto(e.getMessage(), 2);
+			responseDto = new BasicResponseDto(e.getMessage(), 2);
 		} catch (Exception e) {
 			log.error("Error UserController@enableUser#General ---> " + e.getMessage());
 			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-			responseDto = new ErrorDto(e.getMessage(), 3);
+			responseDto = new BasicResponseDto(e.getMessage(), 3);
 		}
 
 		return new ResponseEntity<>(responseDto, httpStatus);
@@ -336,11 +338,100 @@ public class UserV1Controller {
 		} catch (BusinessException e) {
 			log.error("Error UserController@disableUser#Business ---> " + e.getMessage());
 			httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
-			responseDto = new ErrorDto(e.getMessage(), 2);
+			responseDto = new BasicResponseDto(e.getMessage(), 2);
 		} catch (Exception e) {
 			log.error("Error UserController@disableUser#General ---> " + e.getMessage());
 			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-			responseDto = new ErrorDto(e.getMessage(), 3);
+			responseDto = new BasicResponseDto(e.getMessage(), 3);
+		}
+
+		return new ResponseEntity<>(responseDto, httpStatus);
+	}
+
+	@PutMapping("/recover")
+	@ApiOperation(value = "Recover account")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "OTP generated"),
+			@ApiResponse(code = 500, message = "Error Server") })
+	public ResponseEntity<Object> recoverAccount(@RequestBody RecoverAccountDto recoverAccount) {
+
+		HttpStatus httpStatus = null;
+		Object responseDto = null;
+
+		try {
+
+			// validation email
+			String email = recoverAccount.getEmail();
+			if (email == null || email.isEmpty()) {
+				throw new InputValidationException("El correo electrónico es requerido.");
+			}
+
+			userBusiness.recoverAccount(email);
+			responseDto = new BasicResponseDto(
+					"Se ha enviado un correo electrónico con las instrucciones para recuperar la cuenta", 7);
+			httpStatus = HttpStatus.OK;
+
+		} catch (InputValidationException e) {
+			log.error("Error UserController@recoverAccount#Validation ---> " + e.getMessage());
+			httpStatus = HttpStatus.BAD_REQUEST;
+			responseDto = new BasicResponseDto(e.getMessage(), 2);
+		} catch (BusinessException e) {
+			log.error("Error UserController@recoverAccount#Business ---> " + e.getMessage());
+			httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
+			responseDto = new BasicResponseDto(e.getMessage(), 2);
+		} catch (Exception e) {
+			log.error("Error UserController@recoverAccount#General ---> " + e.getMessage());
+			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+			responseDto = new BasicResponseDto(e.getMessage(), 3);
+		}
+
+		return new ResponseEntity<>(responseDto, httpStatus);
+	}
+
+	@PutMapping("/reset")
+	@ApiOperation(value = "Reset account")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Password changed"),
+			@ApiResponse(code = 500, message = "Error Server") })
+	public ResponseEntity<Object> resetAccount(@RequestBody ResetAccountDto recoverAccount) {
+
+		HttpStatus httpStatus = null;
+		Object responseDto = null;
+
+		try {
+
+			// validation email
+			String email = recoverAccount.getEmail();
+			if (email == null || email.isEmpty()) {
+				throw new InputValidationException("El correo electrónico es requerido.");
+			}
+
+			// validation password
+			String password = recoverAccount.getNewPassword();
+			if (password == null || password.isEmpty()) {
+				throw new InputValidationException("La nueva contraseña es requerido.");
+			}
+
+			// validation password
+			String code = recoverAccount.getCode();
+			if (code == null || code.isEmpty()) {
+				throw new InputValidationException("El código OTP es requerido.");
+			}
+
+			userBusiness.resetAccount(email, code, password);
+			responseDto = new BasicResponseDto("Se ha cambiado la contraseña correctamente!", 7);
+			httpStatus = HttpStatus.OK;
+
+		} catch (InputValidationException e) {
+			log.error("Error UserController@resetAccount#Validation ---> " + e.getMessage());
+			httpStatus = HttpStatus.BAD_REQUEST;
+			responseDto = new BasicResponseDto(e.getMessage(), 2);
+		} catch (BusinessException e) {
+			log.error("Error UserController@resetAccount#Business ---> " + e.getMessage());
+			httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
+			responseDto = new BasicResponseDto(e.getMessage(), 2);
+		} catch (Exception e) {
+			log.error("Error UserController@resetAccount#General ---> " + e.getMessage());
+			httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+			responseDto = new BasicResponseDto(e.getMessage(), 3);
 		}
 
 		return new ResponseEntity<>(responseDto, httpStatus);
