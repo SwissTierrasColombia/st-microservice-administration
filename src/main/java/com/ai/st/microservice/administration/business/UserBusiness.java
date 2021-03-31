@@ -271,9 +271,7 @@ public class UserBusiness {
         return userDto;
     }
 
-    public UserDto updateUser(Long userId, String firstName, String lastName) throws BusinessException {
-
-        UserDto userDto = null;
+    public UserDto updateUser(Long userId, String firstName, String lastName, String email) throws BusinessException {
 
         UserEntity userEntity = userService.getUserById(userId);
 
@@ -285,9 +283,17 @@ public class UserBusiness {
         userEntity.setFirstName(firstName);
         userEntity.setLastName(lastName);
 
+        if (email != null) {
+            UserEntity userEntityFound = userService.getUserByEmail(email);
+            if (userEntityFound != null && !userEntityFound.getId().equals(userId)) {
+                throw new BusinessException("Ya existe un usuario registrado con el mismo correo electrónico");
+            }
+            userEntity.setEmail(email);
+        }
+
         userEntity = userService.createUser(userEntity);
 
-        userDto = new UserDto();
+        UserDto userDto = new UserDto();
 
         userDto.setId(userEntity.getId());
         userDto.setFirstName(userEntity.getFirstName());

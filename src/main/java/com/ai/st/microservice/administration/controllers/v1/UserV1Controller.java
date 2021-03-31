@@ -5,8 +5,6 @@ import java.util.Map;
 
 import com.ai.st.microservice.administration.dto.*;
 import com.ai.st.microservice.common.business.AdministrationBusiness;
-import com.ai.st.microservice.common.dto.administration.MicroserviceUserDto;
-import com.ai.st.microservice.common.exceptions.DisconnectedMicroserviceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -250,8 +248,8 @@ public class UserV1Controller {
             @ApiResponse(code = 500, message = "Error Server")})
     public ResponseEntity<Object> updateUser(@PathVariable Long userId, @RequestBody UpdateUserDto requestUpdateUser) {
 
-        HttpStatus httpStatus = null;
-        Object responseDto = null;
+        HttpStatus httpStatus;
+        Object responseDto;
 
         try {
 
@@ -267,7 +265,7 @@ public class UserV1Controller {
                 throw new InputValidationException("El apellido es requerido");
             }
 
-            responseDto = userBusiness.updateUser(userId, firstName, lastName);
+            responseDto = userBusiness.updateUser(userId, firstName, lastName, requestUpdateUser.getEmail());
             httpStatus = HttpStatus.OK;
 
         } catch (InputValidationException e) {
