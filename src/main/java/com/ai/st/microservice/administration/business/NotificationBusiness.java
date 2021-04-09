@@ -15,13 +15,14 @@ public class NotificationBusiness {
     @Autowired
     private NotifierFeignClient notifierClient;
 
-    public void sendNotificationRecoverAccount(String email, String code, String expirationDate, Long userCode) {
+    public void sendNotificationRecoverAccount(String email, String code, String username, String expirationDate, Long userCode) {
 
         try {
 
             MicroserviceNotificationRecoverAccountDto notification = new MicroserviceNotificationRecoverAccountDto();
             notification.setEmail(email);
             notification.setCode(code);
+            notification.setUsername(username);
             notification.setExpirationDate(expirationDate);
             notification.setStatus(0);
             notification.setType("success");

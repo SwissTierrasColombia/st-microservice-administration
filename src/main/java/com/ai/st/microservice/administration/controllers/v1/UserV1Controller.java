@@ -82,7 +82,7 @@ public class UserV1Controller {
             @ApiResponse(code = 404, message = "User Not Found"), @ApiResponse(code = 500, message = "Error Server")})
     public ResponseEntity<UserDto> searchUserByToken(@RequestParam(required = true, name = "token") String jwtToken) {
 
-        HttpStatus httpStatus = null;
+        HttpStatus httpStatus;
         UserDto userDto = null;
 
         try {
@@ -113,8 +113,8 @@ public class UserV1Controller {
             @ApiResponse(code = 500, message = "Error Server")})
     public ResponseEntity<Object> createUser(@RequestBody CreateUserDto requestCreateUser) {
 
-        HttpStatus httpStatus = null;
-        Object responseDto = null;
+        HttpStatus httpStatus;
+        Object responseDto;
 
         try {
 
@@ -177,8 +177,8 @@ public class UserV1Controller {
             @ApiResponse(code = 500, message = "Error Server")})
     public ResponseEntity<Object> getUsers(@RequestParam(name = "roles", required = false) List<Long> roles) {
 
-        Object responseDto = null;
-        HttpStatus httpStatus = null;
+        Object responseDto;
+        HttpStatus httpStatus;
 
         try {
 
@@ -211,8 +211,8 @@ public class UserV1Controller {
     public ResponseEntity<Object> changePassword(@PathVariable(required = true, name = "id") Long userId,
                                                  @RequestBody ChangePasswordDto requestChangePassword) {
 
-        Object responseDto = null;
-        HttpStatus httpStatus = null;
+        Object responseDto;
+        HttpStatus httpStatus;
 
         try {
 
@@ -291,8 +291,8 @@ public class UserV1Controller {
             @ApiResponse(code = 500, message = "Error Server")})
     public ResponseEntity<Object> enableUser(@PathVariable Long userId) {
 
-        HttpStatus httpStatus = null;
-        Object responseDto = null;
+        HttpStatus httpStatus;
+        Object responseDto;
 
         try {
 
@@ -345,8 +345,8 @@ public class UserV1Controller {
             @ApiResponse(code = 500, message = "Error Server")})
     public ResponseEntity<Object> recoverAccount(@RequestBody RecoverAccountDto recoverAccount) {
 
-        HttpStatus httpStatus = null;
-        Object responseDto = null;
+        HttpStatus httpStatus;
+        Object responseDto;
 
         try {
 
@@ -384,14 +384,14 @@ public class UserV1Controller {
             @ApiResponse(code = 500, message = "Error Server")})
     public ResponseEntity<Object> resetAccount(@RequestBody ResetAccountDto recoverAccount) {
 
-        HttpStatus httpStatus = null;
-        Object responseDto = null;
+        HttpStatus httpStatus;
+        Object responseDto;
 
         try {
 
-            // validation email
-            String email = recoverAccount.getEmail();
-            if (email == null || email.isEmpty()) {
+            // validation username
+            String username = recoverAccount.getUsername();
+            if (username == null || username.isEmpty()) {
                 throw new InputValidationException("El correo electrónico es requerido.");
             }
 
@@ -407,8 +407,8 @@ public class UserV1Controller {
                 throw new InputValidationException("El código OTP es requerido.");
             }
 
-            userBusiness.resetAccount(email, code, password);
-            responseDto = new BasicResponseDto("Se ha cambiado la contraseña correctamente!", 7);
+            userBusiness.resetAccount(username, code, password);
+            responseDto = new BasicResponseDto("Se ha actualizado la contraseña correctamente!", 7);
             httpStatus = HttpStatus.OK;
 
         } catch (InputValidationException e) {

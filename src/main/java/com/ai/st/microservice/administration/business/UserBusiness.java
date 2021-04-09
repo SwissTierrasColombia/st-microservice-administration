@@ -284,10 +284,6 @@ public class UserBusiness {
         userEntity.setLastName(lastName);
 
         if (email != null) {
-            UserEntity userEntityFound = userService.getUserByEmail(email);
-            if (userEntityFound != null && !userEntityFound.getId().equals(userId)) {
-                throw new BusinessException("Ya existe un usuario registrado con el mismo correo electrónico");
-            }
             userEntity.setEmail(email);
         }
 
@@ -382,40 +378,44 @@ public class UserBusiness {
 
     public void recoverAccount(String email) throws BusinessException {
 
-        UserEntity userEntity = userService.getUserByEmail(email);
+        List<UserEntity> usersEntity = userService.getUsersByEmail(email);
 
-        if (userEntity == null) {
+        if (usersEntity.size() == 0) {
             throw new BusinessException("No existe un usuario registrado con el correo electrónico especificado.");
-        }
-
-        boolean result = codeBusiness.unavailableCodesByUser(userEntity.getId());
-        if (!result) {
-            throw new BusinessException("No se ha podido generar las instrucciones de recuperación de cuenta.");
         }
 
         int addMinuteTime = 10;
-        Date targetTime = new Date();
-        targetTime = DateUtils.addMinutes(targetTime, addMinuteTime);
-
-        CodeEntity codeEntity = codeBusiness.createCode(userEntity, targetTime);
-        if (codeEntity == null) {
-            throw new BusinessException("No se ha podido generar las instrucciones de recuperación de cuenta.");
-        }
+        Date expirationDate = new Date();
+        expirationDate = DateUtils.addMinutes(expirationDate, addMinuteTime);
 
         String pattern = "yyyy-MM-dd HH:mm:ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        String date = simpleDateFormat.format(codeEntity.getExpiredAt());
 
-        // send email
-        notificationBusiness.sendNotificationRecoverAccount(email, codeEntity.getCode(), date, userEntity.getId());
+        for (UserEntity userEntity : usersEntity) {
+            boolean result = codeBusiness.unavailableCodesByUser(userEntity.getId());
+            if (!result) {
+                throw new BusinessException("No se ha podido generar las instrucciones de recuperación de cuenta.");
+            }
+
+            CodeEntity codeEntity = codeBusiness.createCode(userEntity, expirationDate);
+            if (codeEntity == null) {
+                throw new BusinessException("No se ha podido generar las instrucciones de recuperación de cuenta.");
+            }
+
+            String date = simpleDateFormat.format(expirationDate);
+
+            // send email
+            notificationBusiness.sendNotificationRecoverAccount(email, codeEntity.getCode(), userEntity.getUsername(), date, userEntity.getId());
+        }
+
     }
 
-    public void resetAccount(String email, String code, String password) throws BusinessException {
+    public void resetAccount(String username, String code, String password) throws BusinessException {
 
-        UserEntity userEntity = userService.getUserByEmail(email);
+        UserEntity userEntity = userService.getUserByUsername(username.trim());
 
         if (userEntity == null) {
-            throw new BusinessException("No existe un usuario registrado con el correo electrónico especificado.");
+            throw new BusinessException("No existe un usuario registrado con el username especificado.");
         }
 
         CodeEntity codeEntity = codeBusiness.getOTPByCodeAndUser(code, userEntity);
