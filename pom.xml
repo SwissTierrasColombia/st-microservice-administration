@@ -100,7 +100,7 @@
 		<dependency>
 			<groupId>com.ai.st.microservice.common</groupId>
 			<artifactId>st-common</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>1.0.0</version>
 		</dependency>
 
 	</dependencies>
