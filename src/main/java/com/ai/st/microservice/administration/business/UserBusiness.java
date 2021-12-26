@@ -5,9 +5,15 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.ai.st.microservice.administration.dto.*;
+import com.ai.st.microservice.administration.entities.CodeEntity;
+import com.ai.st.microservice.administration.entities.RoleEntity;
+import com.ai.st.microservice.administration.entities.UserEntity;
+import com.ai.st.microservice.administration.exceptions.BusinessException;
+import com.ai.st.microservice.administration.models.services.IRoleService;
+import com.ai.st.microservice.administration.models.services.IUserService;
+
 import com.ai.st.microservice.common.business.RoleBusiness;
 import com.ai.st.microservice.common.clients.ManagerFeignClient;
-import com.ai.st.microservice.common.clients.NotifierFeignClient;
 import com.ai.st.microservice.common.clients.OperatorFeignClient;
 import com.ai.st.microservice.common.clients.ProviderFeignClient;
 import com.ai.st.microservice.common.dto.managers.MicroserviceManagerDto;
@@ -16,18 +22,12 @@ import com.ai.st.microservice.common.dto.operators.MicroserviceOperatorDto;
 import com.ai.st.microservice.common.dto.providers.MicroserviceProviderDto;
 import com.ai.st.microservice.common.dto.providers.MicroserviceProviderProfileDto;
 import com.ai.st.microservice.common.dto.providers.MicroserviceProviderRoleDto;
+
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import com.ai.st.microservice.administration.entities.CodeEntity;
-import com.ai.st.microservice.administration.entities.RoleEntity;
-import com.ai.st.microservice.administration.entities.UserEntity;
-import com.ai.st.microservice.administration.exceptions.BusinessException;
-import com.ai.st.microservice.administration.models.services.IRoleService;
-import com.ai.st.microservice.administration.models.services.IUserService;
 
 @Component
 public class UserBusiness {
@@ -114,7 +114,7 @@ public class UserBusiness {
         return userDto;
     }
 
-    public UserDto createUser(String firstName, String lastName, String password, String email, String username,
+    public UserDto createUser(String firstName, String lastName, String password, String email, String username, boolean enabled,
                               List<Long> roles) throws BusinessException {
 
         email = email.toLowerCase().trim();
@@ -147,7 +147,7 @@ public class UserBusiness {
         userEntity.setLastName(lastName);
         userEntity.setCreatedAt(new Date());
         userEntity.setEmail(email);
-        userEntity.setEnabled(true);
+        userEntity.setEnabled(enabled);
         userEntity.setUsername(username);
         userEntity.setPassword(passwordEncode.encode(password));
         userEntity.setRoles(listRoles);

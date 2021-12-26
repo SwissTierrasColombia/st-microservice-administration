@@ -150,7 +150,7 @@ public class UserV1Controller {
                 throw new InputValidationException("Se debe especificar al menos un rol para el usuario.");
             }
 
-            responseDto = userBusiness.createUser(firstName, lastName, password, email, username, roles);
+            responseDto = userBusiness.createUser(firstName, lastName, password, email, username, requestCreateUser.isEnabled(), roles);
             httpStatus = HttpStatus.OK;
 
         } catch (InputValidationException e) {

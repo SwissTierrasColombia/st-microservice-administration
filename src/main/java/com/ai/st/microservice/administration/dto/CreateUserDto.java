@@ -27,6 +27,9 @@ public class CreateUserDto implements Serializable {
 	@ApiModelProperty(required = true, notes = "Password")
 	private String password;
 
+	@ApiModelProperty(required = true, notes = "Enabled")
+	private boolean enabled;
+
 	@ApiModelProperty(required = true, notes = "Roles")
 	private List<Long> roles;
 
@@ -82,4 +85,11 @@ public class CreateUserDto implements Serializable {
 		this.roles = roles;
 	}
 
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
 }
