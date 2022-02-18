@@ -34,8 +34,14 @@ public class UserDto implements Serializable {
 	@ApiModelProperty(required = true, notes = "Is the user enabled?")
 	private Boolean enabled;
 
+	@ApiModelProperty(required = true, notes = "Amount of successful logins")
+	private Integer amountSuccessfulLogins;
+
 	@ApiModelProperty(required = true, notes = "Creation date")
 	private Date createdAt;
+
+	@ApiModelProperty(required = true, notes = "Last login")
+	private Date lastLogin;
 
 	@ApiModelProperty(required = true, notes = "Update date")
 	private Date updatedAt;
@@ -127,4 +133,19 @@ public class UserDto implements Serializable {
 		this.roles = roles;
 	}
 
+	public Date getLastLogin() {
+		return lastLogin;
+	}
+
+	public void setLastLogin(Date lastLogin) {
+		this.lastLogin = lastLogin;
+	}
+
+	public Integer getAmountSuccessfulLogins() {
+		return amountSuccessfulLogins;
+	}
+
+	public void setAmountSuccessfulLogins(Integer amountSuccessfulLogins) {
+		this.amountSuccessfulLogins = amountSuccessfulLogins;
+	}
 }

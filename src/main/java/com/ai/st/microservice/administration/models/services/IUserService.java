@@ -12,7 +12,7 @@ public interface IUserService {
 
 	Long getAllCount();
 
-	UserEntity createUser(UserEntity user);
+	UserEntity createOrUpdateUser(UserEntity user);
 
 	List<UserEntity> getUsersByEmail(String email);
 

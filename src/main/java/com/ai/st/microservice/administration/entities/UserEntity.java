@@ -44,9 +44,16 @@ public class UserEntity {
 	@Column(name = "enabled", nullable = false)
 	private Boolean enabled;
 
+	@Column(name = "amount_successful_logins")
+	private Integer amountSuccessfulLogins;
+
 	@Column(name = "created_at", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdAt;
+
+	@Column(name = "last_login")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date lastLogin;
 
 	@Column(name = "updated_at", nullable = true)
 	@Temporal(TemporalType.TIMESTAMP)
@@ -140,4 +147,19 @@ public class UserEntity {
 		this.roles = roles;
 	}
 
+	public Date getLastLogin() {
+		return lastLogin;
+	}
+
+	public void setLastLogin(Date lastLogin) {
+		this.lastLogin = lastLogin;
+	}
+
+	public Integer getAmountSuccessfulLogins() {
+		return amountSuccessfulLogins;
+	}
+
+	public void setAmountSuccessfulLogins(Integer amountSuccessfulLogins) {
+		this.amountSuccessfulLogins = amountSuccessfulLogins;
+	}
 }

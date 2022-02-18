@@ -34,7 +34,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserEntity createUser(UserEntity user) {
+    public UserEntity createOrUpdateUser(UserEntity user) {
         return userRepository.save(user);
     }
 

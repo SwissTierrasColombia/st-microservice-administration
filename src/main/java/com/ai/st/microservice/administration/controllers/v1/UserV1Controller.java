@@ -39,7 +39,7 @@ public class UserV1Controller {
     @ApiOperation(value = "Search user by username for login")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "User found", response = UserDto.class),
             @ApiResponse(code = 404, message = "User Not Found"), @ApiResponse(code = 500, message = "Error Server")})
-    public ResponseEntity<UserDto> searchUser(@RequestParam(required = true, name = "username") String username) {
+    public ResponseEntity<UserDto> searchUser(@RequestParam(name = "username") String username) {
 
         HttpStatus httpStatus;
         UserDto userDto = null;
@@ -496,6 +496,34 @@ public class UserV1Controller {
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
             responseDto = new BasicResponseDto(e.getMessage(), 3);
         }
+
+        return new ResponseEntity<>(responseDto, httpStatus);
+    }
+
+    @PutMapping("/update-last-login")
+    @ApiOperation(value = "Update last login")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Update last login", response = UserDto.class),
+            @ApiResponse(code = 500, message = "Error Server")})
+    public ResponseEntity<Object> updateLastLogin(@RequestParam(name = "username") String username) {
+
+        log.info(String.format("Update last login for user %s", username));
+
+        Object responseDto;
+        HttpStatus httpStatus;
+
+        try {
+
+            responseDto = userBusiness.updateLogin(username);
+            httpStatus = HttpStatus.OK;
+
+        } catch (Exception e) {
+            log.error("Error UserController@updateLastLogin#General ---> " + e.getMessage());
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+            responseDto = new BasicResponseDto(e.getMessage(), 3);
+        }
+
+        log.info(String.format("Update last login for user %s has been finished", username));
 
         return new ResponseEntity<>(responseDto, httpStatus);
     }

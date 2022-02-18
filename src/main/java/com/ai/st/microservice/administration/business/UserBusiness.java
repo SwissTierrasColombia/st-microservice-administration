@@ -73,6 +73,8 @@ public class UserBusiness {
             userDto.setCreatedAt(userEntity.getCreatedAt());
             userDto.setUpdatedAt(userEntity.getUpdatedAt());
             userDto.setPassword(userEntity.getPassword());
+            userDto.setLastLogin(userEntity.getLastLogin());
+            userDto.setAmountSuccessfulLogins(userEntity.getAmountSuccessfulLogins());
 
             if (userEntity.getRoles().size() > 0) {
                 for (RoleEntity roleEntity : userEntity.getRoles()) {
@@ -102,6 +104,7 @@ public class UserBusiness {
             userDto.setCreatedAt(userEntity.getCreatedAt());
             userDto.setUpdatedAt(userEntity.getUpdatedAt());
             userDto.setPassword(userEntity.getPassword());
+            userDto.setLastLogin(userEntity.getLastLogin());
 
             if (userEntity.getRoles().size() > 0) {
                 for (RoleEntity roleEntity : userEntity.getRoles()) {
@@ -152,7 +155,7 @@ public class UserBusiness {
         userEntity.setPassword(passwordEncode.encode(password));
         userEntity.setRoles(listRoles);
 
-        userEntity = userService.createUser(userEntity);
+        userEntity = userService.createOrUpdateUser(userEntity);
 
         UserDto userDto = new UserDto();
 
@@ -191,6 +194,7 @@ public class UserBusiness {
             userDto.setEnabled(userEntity.getEnabled());
             userDto.setCreatedAt(userEntity.getCreatedAt());
             userDto.setUpdatedAt(userEntity.getUpdatedAt());
+            userDto.setLastLogin(userEntity.getLastLogin());
             userDto.setPassword(null);
 
             if (userEntity.getRoles().size() > 0) {
@@ -223,6 +227,7 @@ public class UserBusiness {
             userDto.setEnabled(userEntity.getEnabled());
             userDto.setCreatedAt(userEntity.getCreatedAt());
             userDto.setUpdatedAt(userEntity.getUpdatedAt());
+            userDto.setLastLogin(userEntity.getLastLogin());
             userDto.setPassword(null);
 
             if (userEntity.getRoles().size() > 0) {
@@ -246,7 +251,7 @@ public class UserBusiness {
         if (userEntity != null) {
 
             userEntity.setPassword(passwordEncode.encode(newPassword));
-            userEntity = userService.createUser(userEntity);
+            userEntity = userService.createOrUpdateUser(userEntity);
 
             userDto = new UserDto();
 
@@ -258,6 +263,7 @@ public class UserBusiness {
             userDto.setEnabled(userEntity.getEnabled());
             userDto.setCreatedAt(userEntity.getCreatedAt());
             userDto.setUpdatedAt(userEntity.getUpdatedAt());
+            userDto.setLastLogin(userEntity.getLastLogin());
             userDto.setPassword(null);
 
             if (userEntity.getRoles().size() > 0) {
@@ -287,7 +293,7 @@ public class UserBusiness {
             userEntity.setEmail(email);
         }
 
-        userEntity = userService.createUser(userEntity);
+        userEntity = userService.createOrUpdateUser(userEntity);
 
         UserDto userDto = new UserDto();
 
@@ -299,6 +305,7 @@ public class UserBusiness {
         userDto.setEnabled(userEntity.getEnabled());
         userDto.setCreatedAt(userEntity.getCreatedAt());
         userDto.setUpdatedAt(userEntity.getUpdatedAt());
+        userDto.setLastLogin(userEntity.getLastLogin());
         userDto.setPassword(null);
 
         return userDto;
@@ -317,7 +324,7 @@ public class UserBusiness {
         userEntity.setUpdatedAt(new Date());
         userEntity.setEnabled(true);
 
-        userEntity = userService.createUser(userEntity);
+        userEntity = userService.createOrUpdateUser(userEntity);
 
         userDto = new UserDto();
 
@@ -329,6 +336,7 @@ public class UserBusiness {
         userDto.setEnabled(userEntity.getEnabled());
         userDto.setCreatedAt(userEntity.getCreatedAt());
         userDto.setUpdatedAt(userEntity.getUpdatedAt());
+        userDto.setLastLogin(userEntity.getLastLogin());
         userDto.setPassword(null);
 
         if (userEntity.getRoles().size() > 0) {
@@ -353,7 +361,7 @@ public class UserBusiness {
         userEntity.setUpdatedAt(new Date());
         userEntity.setEnabled(false);
 
-        userEntity = userService.createUser(userEntity);
+        userEntity = userService.createOrUpdateUser(userEntity);
 
         userDto = new UserDto();
 
@@ -365,6 +373,7 @@ public class UserBusiness {
         userDto.setEnabled(userEntity.getEnabled());
         userDto.setCreatedAt(userEntity.getCreatedAt());
         userDto.setUpdatedAt(userEntity.getUpdatedAt());
+        userDto.setLastLogin(userEntity.getLastLogin());
         userDto.setPassword(null);
 
         if (userEntity.getRoles().size() > 0) {
@@ -580,24 +589,43 @@ public class UserBusiness {
         return users;
     }
 
-    public UserDto entityParseDto(UserEntity userEntity) {
+    public UserDto updateLogin(String username) {
 
-        UserDto userDto = new UserDto();
+        UserDto userDto = null;
 
-        userDto.setId(userEntity.getId());
-        userDto.setFirstName(userEntity.getFirstName());
-        userDto.setLastName(userEntity.getLastName());
-        userDto.setEmail(userEntity.getEmail());
-        userDto.setUsername(userEntity.getUsername());
-        userDto.setEnabled(userEntity.getEnabled());
-        userDto.setCreatedAt(userEntity.getCreatedAt());
-        userDto.setUpdatedAt(userEntity.getUpdatedAt());
-        userDto.setPassword(null);
+        UserEntity userEntity = userService.getUserByUsername(username);
 
-        if (userEntity.getRoles().size() > 0) {
-            for (RoleEntity roleEntity : userEntity.getRoles()) {
-                userDto.getRoles().add(new RoleDto(roleEntity.getId(), roleEntity.getName()));
+        if (userEntity != null) {
+
+            int amountSuccessfulLogins = 1;
+            if (userEntity.getAmountSuccessfulLogins() != null) {
+                amountSuccessfulLogins = userEntity.getAmountSuccessfulLogins() + 1;
             }
+
+            userEntity.setLastLogin(new Date());
+            userEntity.setAmountSuccessfulLogins(amountSuccessfulLogins);
+            userEntity = userService.createOrUpdateUser(userEntity);
+
+            userDto = new UserDto();
+
+            userDto.setId(userEntity.getId());
+            userDto.setFirstName(userEntity.getFirstName());
+            userDto.setLastName(userEntity.getLastName());
+            userDto.setEmail(userEntity.getEmail());
+            userDto.setUsername(userEntity.getUsername());
+            userDto.setEnabled(userEntity.getEnabled());
+            userDto.setCreatedAt(userEntity.getCreatedAt());
+            userDto.setUpdatedAt(userEntity.getUpdatedAt());
+            userDto.setLastLogin(userEntity.getLastLogin());
+            userDto.setAmountSuccessfulLogins(userEntity.getAmountSuccessfulLogins());
+            userDto.setPassword(null);
+
+            if (userEntity.getRoles().size() > 0) {
+                for (RoleEntity roleEntity : userEntity.getRoles()) {
+                    userDto.getRoles().add(new RoleDto(roleEntity.getId(), roleEntity.getName()));
+                }
+            }
+
         }
 
         return userDto;

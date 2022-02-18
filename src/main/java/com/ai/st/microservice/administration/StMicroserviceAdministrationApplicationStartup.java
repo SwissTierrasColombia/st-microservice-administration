@@ -110,7 +110,7 @@ public class StMicroserviceAdministrationApplicationStartup implements Applicati
                 listRoles1.add(roleSuper);
                 userToTest1.setRoles(listRoles1);
 
-                userService.createUser(userToTest1);
+                userService.createOrUpdateUser(userToTest1);
 
                 log.info("The domains 'users' have been loaded!");
             } catch (Exception e) {
