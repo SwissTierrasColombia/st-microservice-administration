@@ -10,7 +10,7 @@ ENV CLOUD_CONFIG=$CLOUD_CONFIG
 
 VOLUME /tmp
 
-ADD ./target/st-microservice-administration-1.3.5.jar st-microservice-administration.jar
+ADD ./target/st-microservice-administration-1.4.0.jar st-microservice-administration.jar
 
 EXPOSE 8080
 
