@@ -12,6 +12,7 @@ import com.ai.st.microservice.administration.exceptions.BusinessException;
 import com.ai.st.microservice.administration.models.services.IRoleService;
 import com.ai.st.microservice.administration.models.services.IUserService;
 
+import com.ai.st.microservice.administration.notifier.NotifierChangeEmailService;
 import com.ai.st.microservice.common.business.RoleBusiness;
 import com.ai.st.microservice.common.clients.ManagerFeignClient;
 import com.ai.st.microservice.common.clients.OperatorFeignClient;
@@ -55,6 +56,9 @@ public class UserBusiness {
 
     @Autowired
     private OperatorFeignClient operatorClient;
+
+    @Autowired
+    private NotifierChangeEmailService notifierChangeEmailService;
 
     public UserDto getUserByUsername(String username) {
 
@@ -252,6 +256,8 @@ public class UserBusiness {
 
             userEntity.setPassword(passwordEncode.encode(newPassword));
             userEntity = userService.createOrUpdateUser(userEntity);
+
+            notifierChangeEmailService.sendNotification(userEntity.getId(), userEntity.getEmail());
 
             userDto = new UserDto();
 
