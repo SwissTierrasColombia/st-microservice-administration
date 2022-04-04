@@ -235,7 +235,7 @@ public class UserV1Controller {
             @ApiResponse(code = 200, message = "Reset password", response = UserDto.class, responseContainer = "List"),
             @ApiResponse(code = 500, message = "Error Server") })
     public ResponseEntity<?> changePassword(@PathVariable(name = "id") Long userId,
-                                            @RequestBody ChangePasswordDto requestChangePassword) {
+            @RequestBody ChangePasswordDto requestChangePassword) {
 
         Object responseDto;
         HttpStatus httpStatus;

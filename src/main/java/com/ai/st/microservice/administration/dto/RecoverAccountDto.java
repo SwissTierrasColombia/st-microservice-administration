@@ -27,8 +27,6 @@ public class RecoverAccountDto implements Serializable {
 
     @Override
     public String toString() {
-        return "RecoverAccountDto{" +
-                "email='" + email + '\'' +
-                '}';
+        return "RecoverAccountDto{" + "email='" + email + '\'' + '}';
     }
 }

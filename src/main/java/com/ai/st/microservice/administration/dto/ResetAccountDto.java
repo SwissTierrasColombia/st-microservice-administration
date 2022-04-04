@@ -45,10 +45,7 @@ public class ResetAccountDto implements Serializable {
 
     @Override
     public String toString() {
-        return "ResetAccountDto{" +
-                "username='" + username + '\'' +
-                ", code='" + code + '\'' +
-                ", newPassword='" + newPassword + '\'' +
-                '}';
+        return "ResetAccountDto{" + "username='" + username + '\'' + ", code='" + code + '\'' + ", newPassword='"
+                + newPassword + '\'' + '}';
     }
 }

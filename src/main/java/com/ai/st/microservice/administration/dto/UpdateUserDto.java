@@ -49,10 +49,7 @@ public class UpdateUserDto implements Serializable {
 
     @Override
     public String toString() {
-        return "UpdateUserDto{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+        return "UpdateUserDto{" + "firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", email='"
+                + email + '\'' + '}';
     }
 }
