@@ -13,6 +13,7 @@ import com.ai.st.microservice.administration.models.services.IRoleService;
 import com.ai.st.microservice.administration.models.services.IUserService;
 
 import com.ai.st.microservice.administration.notifier.NotifierChangeEmailService;
+import com.ai.st.microservice.administration.services.tracing.SCMTracing;
 import com.ai.st.microservice.common.business.RoleBusiness;
 import com.ai.st.microservice.common.clients.ManagerFeignClient;
 import com.ai.st.microservice.common.clients.OperatorFeignClient;
@@ -26,12 +27,16 @@ import com.ai.st.microservice.common.dto.providers.MicroserviceProviderRoleDto;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.time.DateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserBusiness {
+
+    private final Logger log = LoggerFactory.getLogger(UserBusiness.class);
 
     @Autowired
     private IUserService userService;
@@ -527,8 +532,11 @@ public class UserBusiness {
                 MicroserviceProviderDto providerDto = providerClient.findProviderByAdministrator(userEntity.getId());
                 providerUserDto.setProvider(providerDto);
                 found = true;
-            } catch (Exception ignored) {
-
+            } catch (Exception e) {
+                String messageError = String.format("Error consultando los roles y el proveedor por el usuario %d : %s",
+                        userEntity.getId(), e.getMessage());
+                SCMTracing.sendError(messageError);
+                log.error(messageError);
             }
 
             try {
@@ -539,8 +547,12 @@ public class UserBusiness {
                 providerUserDto.setProvider(providerDto);
 
                 found = true;
-            } catch (Exception ignored) {
-
+            } catch (Exception e) {
+                String messageError = String.format(
+                        "Error consultando los perfiles y el proveedor por el usuario %d : %s", userEntity.getId(),
+                        e.getMessage());
+                SCMTracing.sendError(messageError);
+                log.error(messageError);
             }
 
             if (found) {
