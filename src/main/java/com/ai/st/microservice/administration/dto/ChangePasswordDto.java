@@ -25,4 +25,10 @@ public class ChangePasswordDto implements Serializable {
         this.password = password;
     }
 
+    @Override
+    public String toString() {
+        return "ChangePasswordDto{" +
+                "password='" + password + '\'' +
+                '}';
+    }
 }

@@ -319,7 +319,7 @@ public class UserBusiness {
 
     public UserDto enableUser(Long userId) throws BusinessException {
 
-        UserDto userDto = null;
+        UserDto userDto;
 
         UserEntity userEntity = userService.getUserById(userId);
 
@@ -356,7 +356,7 @@ public class UserBusiness {
 
     public UserDto disableUser(Long userId) throws BusinessException {
 
-        UserDto userDto = null;
+        UserDto userDto;
 
         UserEntity userEntity = userService.getUserById(userId);
 

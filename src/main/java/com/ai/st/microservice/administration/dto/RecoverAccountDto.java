@@ -25,4 +25,10 @@ public class RecoverAccountDto implements Serializable {
         this.email = email;
     }
 
+    @Override
+    public String toString() {
+        return "RecoverAccountDto{" +
+                "email='" + email + '\'' +
+                '}';
+    }
 }
