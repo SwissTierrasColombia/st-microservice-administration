@@ -6,7 +6,6 @@ import java.util.Map;
 import com.ai.st.microservice.administration.dto.*;
 import com.ai.st.microservice.administration.services.tracing.SCMTracing;
 import com.ai.st.microservice.administration.services.tracing.TracingKeyword;
-import com.ai.st.microservice.common.business.AdministrationBusiness;
 import com.ai.st.microservice.common.dto.general.BasicResponseDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,11 +31,9 @@ public class UserV1Controller {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final UserBusiness userBusiness;
-    private final AdministrationBusiness administrationBusiness;
 
-    public UserV1Controller(UserBusiness userBusiness, AdministrationBusiness administrationBusiness) {
+    public UserV1Controller(UserBusiness userBusiness) {
         this.userBusiness = userBusiness;
-        this.administrationBusiness = administrationBusiness;
     }
 
     @GetMapping("/login")
