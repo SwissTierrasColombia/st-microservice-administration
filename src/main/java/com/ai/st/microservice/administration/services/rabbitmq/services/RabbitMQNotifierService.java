@@ -1,4 +1,4 @@
-package com.ai.st.microservice.administration.rabbitmq.services;
+package com.ai.st.microservice.administration.services.rabbitmq.services;
 
 import com.ai.st.microservice.common.dto.notifier.MicroserviceNotificationDto;
 import org.springframework.amqp.core.AmqpTemplate;

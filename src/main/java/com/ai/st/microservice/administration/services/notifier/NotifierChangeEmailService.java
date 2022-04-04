@@ -1,7 +1,7 @@
-package com.ai.st.microservice.administration.notifier;
+package com.ai.st.microservice.administration.services.notifier;
 
-import com.ai.st.microservice.administration.rabbitmq.services.RabbitMQNotifierService;
-import com.ai.st.microservice.administration.thymeleaf.ThymeleafRenderService;
+import com.ai.st.microservice.administration.services.rabbitmq.services.RabbitMQNotifierService;
+import com.ai.st.microservice.administration.services.thymeleaf.ThymeleafRenderService;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -26,7 +26,6 @@ public class NotifierChangeEmailService {
     public void sendNotification(Long userId, String email) {
 
         Map<String, Object> data = new HashMap<>();
-        // data.put("userId", userId);
 
         String bodyMessage = thymeleafRenderService.parse(CHANGE_PASSWORD_FILE_TEMPLATE, data);
 
