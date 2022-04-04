@@ -1,5 +1,6 @@
 package com.ai.st.microservice.administration.business;
 
+import com.ai.st.microservice.administration.services.tracing.SCMTracing;
 import com.ai.st.microservice.common.clients.NotifierFeignClient;
 import com.ai.st.microservice.common.dto.notifier.MicroserviceNotificationRecoverAccountDto;
 import org.slf4j.Logger;
@@ -28,13 +29,17 @@ public class NotificationBusiness {
             notification.setUsername(username);
             notification.setExpirationDate(expirationDate);
             notification.setStatus(0);
-            notification.setType("success");
+            notification.setType("recoverAccount");
             notification.setUserCode(userCode);
 
             notifierClient.recoverAccount(notification);
 
         } catch (Exception e) {
-            log.error("Error enviando la notificación de recuperación de cuenta: " + e.getMessage());
+            String messageError = String.format(
+                    "Error enviando la notificación de recuperación de cuenta al usuario %d : %s", userCode,
+                    e.getMessage());
+            SCMTracing.sendError(messageError);
+            log.error(messageError);
         }
 
     }
