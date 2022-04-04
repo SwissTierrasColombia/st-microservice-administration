@@ -8,21 +8,21 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "RecoverAccountDto", description = "Recover Account Dto")
 public class RecoverAccountDto implements Serializable {
 
-	private static final long serialVersionUID = 6919516948250085614L;
+    private static final long serialVersionUID = 6919516948250085614L;
 
-	@ApiModelProperty(required = true, notes = "Email")
-	private String email;
+    @ApiModelProperty(required = true, notes = "Email")
+    private String email;
 
-	public RecoverAccountDto() {
+    public RecoverAccountDto() {
 
-	}
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
 }

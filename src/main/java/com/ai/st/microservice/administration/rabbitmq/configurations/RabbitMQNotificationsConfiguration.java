@@ -40,11 +40,11 @@ public class RabbitMQNotificationsConfiguration {
         return new Jackson2JsonMessageConverter();
     }
 
-//    @Bean
-//    public AmqpTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
-//        final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-//        rabbitTemplate.setMessageConverter(jsonMessageConverter());
-//        return rabbitTemplate;
-//    }
+    // @Bean
+    // public AmqpTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
+    // final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+    // rabbitTemplate.setMessageConverter(jsonMessageConverter());
+    // return rabbitTemplate;
+    // }
 
 }

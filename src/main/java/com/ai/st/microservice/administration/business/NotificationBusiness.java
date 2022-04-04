@@ -17,7 +17,8 @@ public class NotificationBusiness {
         this.notifierClient = notifierClient;
     }
 
-    public void sendNotificationRecoverAccount(String email, String code, String username, String expirationDate, Long userCode) {
+    public void sendNotificationRecoverAccount(String email, String code, String username, String expirationDate,
+            Long userCode) {
 
         try {
 

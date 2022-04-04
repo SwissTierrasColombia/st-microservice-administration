@@ -37,8 +37,8 @@ public class UserV1Controller {
 
     @GetMapping("/login")
     @ApiOperation(value = "Search user by username for login")
-    @ApiResponses(value = {@ApiResponse(code = 200, message = "User found", response = UserDto.class),
-            @ApiResponse(code = 404, message = "User Not Found"), @ApiResponse(code = 500, message = "Error Server")})
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "User found", response = UserDto.class),
+            @ApiResponse(code = 404, message = "User Not Found"), @ApiResponse(code = 500, message = "Error Server") })
     public ResponseEntity<UserDto> searchUser(@RequestParam(name = "username") String username) {
 
         HttpStatus httpStatus;
@@ -57,8 +57,8 @@ public class UserV1Controller {
 
     @GetMapping("/{id}")
     @ApiOperation(value = "Get user by id")
-    @ApiResponses(value = {@ApiResponse(code = 200, message = "User found", response = UserDto.class),
-            @ApiResponse(code = 404, message = "User Not Found"), @ApiResponse(code = 500, message = "Error Server")})
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "User found", response = UserDto.class),
+            @ApiResponse(code = 404, message = "User Not Found"), @ApiResponse(code = 500, message = "Error Server") })
     public ResponseEntity<UserDto> getUserById(@PathVariable(required = true, name = "id") Long userId) {
 
         HttpStatus httpStatus = null;
@@ -78,8 +78,8 @@ public class UserV1Controller {
 
     @GetMapping("/token")
     @ApiOperation(value = "Search user by token")
-    @ApiResponses(value = {@ApiResponse(code = 200, message = "User found", response = UserDto.class),
-            @ApiResponse(code = 404, message = "User Not Found"), @ApiResponse(code = 500, message = "Error Server")})
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "User found", response = UserDto.class),
+            @ApiResponse(code = 404, message = "User Not Found"), @ApiResponse(code = 500, message = "Error Server") })
     public ResponseEntity<UserDto> searchUserByToken(@RequestParam(required = true, name = "token") String jwtToken) {
 
         HttpStatus httpStatus;
@@ -109,8 +109,8 @@ public class UserV1Controller {
 
     @PostMapping("")
     @ApiOperation(value = "Create user")
-    @ApiResponses(value = {@ApiResponse(code = 201, message = "User created", response = UserDto.class),
-            @ApiResponse(code = 500, message = "Error Server")})
+    @ApiResponses(value = { @ApiResponse(code = 201, message = "User created", response = UserDto.class),
+            @ApiResponse(code = 500, message = "Error Server") })
     public ResponseEntity<Object> createUser(@RequestBody CreateUserDto requestCreateUser) {
 
         HttpStatus httpStatus;
@@ -150,7 +150,8 @@ public class UserV1Controller {
                 throw new InputValidationException("Se debe especificar al menos un rol para el usuario.");
             }
 
-            responseDto = userBusiness.createUser(firstName, lastName, password, email, username, requestCreateUser.isEnabled(), roles);
+            responseDto = userBusiness.createUser(firstName, lastName, password, email, username,
+                    requestCreateUser.isEnabled(), roles);
             httpStatus = HttpStatus.OK;
 
         } catch (InputValidationException e) {
@@ -174,7 +175,7 @@ public class UserV1Controller {
     @ApiOperation(value = "Get users")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Get users", response = UserDto.class, responseContainer = "List"),
-            @ApiResponse(code = 500, message = "Error Server")})
+            @ApiResponse(code = 500, message = "Error Server") })
     public ResponseEntity<Object> getUsers(@RequestParam(name = "roles", required = false) List<Long> roles) {
 
         Object responseDto;
@@ -207,9 +208,9 @@ public class UserV1Controller {
     @ApiOperation(value = "Reset password")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Reset password", response = UserDto.class, responseContainer = "List"),
-            @ApiResponse(code = 500, message = "Error Server")})
+            @ApiResponse(code = 500, message = "Error Server") })
     public ResponseEntity<Object> changePassword(@PathVariable(required = true, name = "id") Long userId,
-                                                 @RequestBody ChangePasswordDto requestChangePassword) {
+            @RequestBody ChangePasswordDto requestChangePassword) {
 
         Object responseDto;
         HttpStatus httpStatus;
@@ -244,8 +245,8 @@ public class UserV1Controller {
 
     @PutMapping("/{userId}")
     @ApiOperation(value = "Update user")
-    @ApiResponses(value = {@ApiResponse(code = 200, message = "User updated", response = UserDto.class),
-            @ApiResponse(code = 500, message = "Error Server")})
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "User updated", response = UserDto.class),
+            @ApiResponse(code = 500, message = "Error Server") })
     public ResponseEntity<Object> updateUser(@PathVariable Long userId, @RequestBody UpdateUserDto requestUpdateUser) {
 
         HttpStatus httpStatus;
@@ -287,8 +288,8 @@ public class UserV1Controller {
 
     @PutMapping("/{userId}/enable")
     @ApiOperation(value = "Update user")
-    @ApiResponses(value = {@ApiResponse(code = 200, message = "User enabled", response = UserDto.class),
-            @ApiResponse(code = 500, message = "Error Server")})
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "User enabled", response = UserDto.class),
+            @ApiResponse(code = 500, message = "Error Server") })
     public ResponseEntity<Object> enableUser(@PathVariable Long userId) {
 
         HttpStatus httpStatus;
@@ -314,8 +315,8 @@ public class UserV1Controller {
 
     @PutMapping("/{userId}/disable")
     @ApiOperation(value = "Update user")
-    @ApiResponses(value = {@ApiResponse(code = 200, message = "User disabled", response = UserDto.class),
-            @ApiResponse(code = 500, message = "Error Server")})
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "User disabled", response = UserDto.class),
+            @ApiResponse(code = 500, message = "Error Server") })
     public ResponseEntity<Object> disableUser(@PathVariable Long userId) {
 
         HttpStatus httpStatus = null;
@@ -341,8 +342,8 @@ public class UserV1Controller {
 
     @PutMapping("/recover")
     @ApiOperation(value = "Recover account")
-    @ApiResponses(value = {@ApiResponse(code = 200, message = "OTP generated"),
-            @ApiResponse(code = 500, message = "Error Server")})
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "OTP generated"),
+            @ApiResponse(code = 500, message = "Error Server") })
     public ResponseEntity<Object> recoverAccount(@RequestBody RecoverAccountDto recoverAccount) {
 
         HttpStatus httpStatus;
@@ -380,8 +381,8 @@ public class UserV1Controller {
 
     @PutMapping("/reset")
     @ApiOperation(value = "Reset account")
-    @ApiResponses(value = {@ApiResponse(code = 200, message = "Password changed"),
-            @ApiResponse(code = 500, message = "Error Server")})
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Password changed"),
+            @ApiResponse(code = 500, message = "Error Server") })
     public ResponseEntity<Object> resetAccount(@RequestBody ResetAccountDto recoverAccount) {
 
         HttpStatus httpStatus;
@@ -432,7 +433,7 @@ public class UserV1Controller {
     @ApiOperation(value = "Get managers users")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Get users", response = ManagerUserDto.class, responseContainer = "List"),
-            @ApiResponse(code = 500, message = "Error Server")})
+            @ApiResponse(code = 500, message = "Error Server") })
     public ResponseEntity<?> getManagerUsers(@RequestParam(name = "manager", required = false) Long managerCode) {
 
         Object responseDto;
@@ -456,7 +457,7 @@ public class UserV1Controller {
     @ApiOperation(value = "Get providers users")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Get users", response = ProviderUserDto.class, responseContainer = "List"),
-            @ApiResponse(code = 500, message = "Error Server")})
+            @ApiResponse(code = 500, message = "Error Server") })
     public ResponseEntity<?> getProviderUsers(@RequestParam(name = "provider", required = false) Long providerCode) {
 
         Object responseDto;
@@ -480,7 +481,7 @@ public class UserV1Controller {
     @ApiOperation(value = "Get operators users")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Get users", response = OperatorUserDto.class, responseContainer = "List"),
-            @ApiResponse(code = 500, message = "Error Server")})
+            @ApiResponse(code = 500, message = "Error Server") })
     public ResponseEntity<?> getOperatorUsers(@RequestParam(name = "operator", required = false) Long operatorCode) {
 
         Object responseDto;
@@ -502,9 +503,8 @@ public class UserV1Controller {
 
     @PutMapping("/update-last-login")
     @ApiOperation(value = "Update last login")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Update last login", response = UserDto.class),
-            @ApiResponse(code = 500, message = "Error Server")})
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Update last login", response = UserDto.class),
+            @ApiResponse(code = 500, message = "Error Server") })
     public ResponseEntity<Object> updateLastLogin(@RequestParam(name = "username") String username) {
 
         log.info(String.format("Update last login for user %s", username));

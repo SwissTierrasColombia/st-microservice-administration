@@ -18,7 +18,7 @@ public class NotifierChangeEmailService {
     private final RabbitMQNotifierService rabbitMQNotifierService;
 
     public NotifierChangeEmailService(ThymeleafRenderService thymeleafRenderService,
-                                      RabbitMQNotifierService rabbitMQNotifierService) {
+            RabbitMQNotifierService rabbitMQNotifierService) {
         this.thymeleafRenderService = thymeleafRenderService;
         this.rabbitMQNotifierService = rabbitMQNotifierService;
     }
@@ -26,12 +26,11 @@ public class NotifierChangeEmailService {
     public void sendNotification(Long userId, String email) {
 
         Map<String, Object> data = new HashMap<>();
-//        data.put("userId", userId);
+        // data.put("userId", userId);
 
         String bodyMessage = thymeleafRenderService.parse(CHANGE_PASSWORD_FILE_TEMPLATE, data);
 
         rabbitMQNotifierService.sendNotification(NOTIFICATION_SUBJECT, bodyMessage, email, userId);
     }
-
 
 }

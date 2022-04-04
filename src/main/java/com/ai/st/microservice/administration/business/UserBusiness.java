@@ -121,8 +121,8 @@ public class UserBusiness {
         return userDto;
     }
 
-    public UserDto createUser(String firstName, String lastName, String password, String email, String username, boolean enabled,
-                              List<Long> roles) throws BusinessException {
+    public UserDto createUser(String firstName, String lastName, String password, String email, String username,
+            boolean enabled, List<Long> roles) throws BusinessException {
 
         email = email.toLowerCase().trim();
         username = username.toLowerCase().trim();
@@ -420,7 +420,8 @@ public class UserBusiness {
             String date = simpleDateFormat.format(expirationDate);
 
             // send email
-            notificationBusiness.sendNotificationRecoverAccount(email, codeEntity.getCode(), userEntity.getUsername(), date, userEntity.getId());
+            notificationBusiness.sendNotificationRecoverAccount(email, codeEntity.getCode(), userEntity.getUsername(),
+                    date, userEntity.getId());
         }
 
     }
@@ -460,13 +461,12 @@ public class UserBusiness {
 
     public List<ManagerUserDto> getManagerUsers(Long managerCode) {
 
-        List<UserEntity> managerUsers =
-                userService.getUserByRoles(new ArrayList<>(Collections.singletonList(RoleBusiness.ROLE_MANAGER)));
+        List<UserEntity> managerUsers = userService
+                .getUserByRoles(new ArrayList<>(Collections.singletonList(RoleBusiness.ROLE_MANAGER)));
 
         List<ManagerUserDto> users = new ArrayList<>();
 
         for (UserEntity userEntity : managerUsers) {
-
 
             MicroserviceManagerDto managerDto = managerClient.findByUserCode(userEntity.getId());
 
@@ -500,8 +500,8 @@ public class UserBusiness {
 
     public List<ProviderUserDto> getProviderUsers(Long providerCode) {
 
-        List<UserEntity> providerUsers =
-                userService.getUserByRoles(new ArrayList<>(Collections.singletonList(RoleBusiness.ROLE_SUPPLY_SUPPLIER)));
+        List<UserEntity> providerUsers = userService
+                .getUserByRoles(new ArrayList<>(Collections.singletonList(RoleBusiness.ROLE_SUPPLY_SUPPLIER)));
 
         List<ProviderUserDto> users = new ArrayList<>();
 
@@ -550,7 +550,8 @@ public class UserBusiness {
         }
 
         if (providerCode != null) {
-            users = users.stream().filter(u -> u.getProvider().getId().equals(providerCode)).collect(Collectors.toList());
+            users = users.stream().filter(u -> u.getProvider().getId().equals(providerCode))
+                    .collect(Collectors.toList());
         }
 
         return users;
@@ -558,13 +559,12 @@ public class UserBusiness {
 
     public List<OperatorUserDto> getOperatorUsers(Long operatorCode) {
 
-        List<UserEntity> managerUsers =
-                userService.getUserByRoles(new ArrayList<>(Collections.singletonList(RoleBusiness.ROLE_OPERATOR)));
+        List<UserEntity> managerUsers = userService
+                .getUserByRoles(new ArrayList<>(Collections.singletonList(RoleBusiness.ROLE_OPERATOR)));
 
         List<OperatorUserDto> users = new ArrayList<>();
 
         for (UserEntity userEntity : managerUsers) {
-
 
             MicroserviceOperatorDto operatorDto = operatorClient.findByUserCode(userEntity.getId());
 
@@ -589,7 +589,8 @@ public class UserBusiness {
         }
 
         if (operatorCode != null) {
-            users = users.stream().filter(u -> u.getOperator().getId().equals(operatorCode)).collect(Collectors.toList());
+            users = users.stream().filter(u -> u.getOperator().getId().equals(operatorCode))
+                    .collect(Collectors.toList());
         }
 
         return users;

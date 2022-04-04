@@ -6,18 +6,18 @@ import com.ai.st.microservice.administration.entities.UserEntity;
 
 public interface IUserService {
 
-	UserEntity getUserByUsername(String username);
+    UserEntity getUserByUsername(String username);
 
-	UserEntity getUserById(Long id);
+    UserEntity getUserById(Long id);
 
-	Long getAllCount();
+    Long getAllCount();
 
-	UserEntity createOrUpdateUser(UserEntity user);
+    UserEntity createOrUpdateUser(UserEntity user);
 
-	List<UserEntity> getUsersByEmail(String email);
+    List<UserEntity> getUsersByEmail(String email);
 
-	List<UserEntity> getAllUsers();
+    List<UserEntity> getAllUsers();
 
-	List<UserEntity> getUserByRoles(List<Long> roles);
+    List<UserEntity> getUserByRoles(List<Long> roles);
 
 }
