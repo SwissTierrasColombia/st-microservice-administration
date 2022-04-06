@@ -9,6 +9,8 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+CREATE SCHEMA IF NOT EXISTS administration;
+
 SET default_tablespace = '';
 
 CREATE TABLE administration.codes (
