@@ -96,7 +96,6 @@ public class CreateUserDto implements Serializable {
     @Override
     public String toString() {
         return "CreateUserDto{" + "firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", username='"
-                + username + '\'' + ", email='" + email + '\'' + ", password='" + password + '\'' + ", enabled="
-                + enabled + ", roles=" + roles + '}';
+                + username + '\'' + ", email='" + email + '\'' + ", enabled=" + enabled + ", roles=" + roles + '}';
     }
 }
