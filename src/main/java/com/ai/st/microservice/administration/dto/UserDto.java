@@ -11,120 +11,141 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "UserDto", description = "User")
 public class UserDto implements Serializable {
 
-	private static final long serialVersionUID = -5121529899322990688L;
+    private static final long serialVersionUID = -5121529899322990688L;
 
-	@ApiModelProperty(required = true, notes = "User ID")
-	private Long id;
+    @ApiModelProperty(required = true, notes = "User ID")
+    private Long id;
 
-	@ApiModelProperty(required = true, notes = "First Name")
-	private String firstName;
+    @ApiModelProperty(required = true, notes = "First Name")
+    private String firstName;
 
-	@ApiModelProperty(required = true, notes = "Last Name")
-	private String lastName;
+    @ApiModelProperty(required = true, notes = "Last Name")
+    private String lastName;
 
-	@ApiModelProperty(required = true, notes = "Email")
-	private String email;
+    @ApiModelProperty(required = true, notes = "Email")
+    private String email;
 
-	@ApiModelProperty(required = true, notes = "Username")
-	private String username;
+    @ApiModelProperty(required = true, notes = "Username")
+    private String username;
 
-	@ApiModelProperty(required = true, notes = "Password")
-	private String password;
+    @ApiModelProperty(required = true, notes = "Password")
+    private String password;
 
-	@ApiModelProperty(required = true, notes = "Is the user enabled?")
-	private Boolean enabled;
+    @ApiModelProperty(required = true, notes = "Is the user enabled?")
+    private Boolean enabled;
 
-	@ApiModelProperty(required = true, notes = "Creation date")
-	private Date createdAt;
+    @ApiModelProperty(required = true, notes = "Amount of successful logins")
+    private Integer amountSuccessfulLogins;
 
-	@ApiModelProperty(required = true, notes = "Update date")
-	private Date updatedAt;
+    @ApiModelProperty(required = true, notes = "Creation date")
+    private Date createdAt;
 
-	@ApiModelProperty(required = false, notes = "Roles user")
-	private List<RoleDto> roles;
+    @ApiModelProperty(required = true, notes = "Last login")
+    private Date lastLogin;
 
-	public UserDto() {
-		this.roles = new ArrayList<RoleDto>();
-	}
+    @ApiModelProperty(required = true, notes = "Update date")
+    private Date updatedAt;
 
-	public Long getId() {
-		return id;
-	}
+    @ApiModelProperty(required = false, notes = "Roles user")
+    private List<RoleDto> roles;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public UserDto() {
+        this.roles = new ArrayList<RoleDto>();
+    }
 
-	public String getFirstName() {
-		return firstName;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getLastName() {
-		return lastName;
-	}
+    public String getFirstName() {
+        return firstName;
+    }
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getLastName() {
+        return lastName;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-	public String getUsername() {
-		return username;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public String getUsername() {
+        return username;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-	public Boolean getEnabled() {
-		return enabled;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public void setEnabled(Boolean enabled) {
-		this.enabled = enabled;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public Date getCreatedAt() {
-		return createdAt;
-	}
+    public Boolean getEnabled() {
+        return enabled;
+    }
 
-	public void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
-	}
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
 
-	public Date getUpdatedAt() {
-		return updatedAt;
-	}
+    public Date getCreatedAt() {
+        return createdAt;
+    }
 
-	public void setUpdatedAt(Date updatedAt) {
-		this.updatedAt = updatedAt;
-	}
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
 
-	public List<RoleDto> getRoles() {
-		return roles;
-	}
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
 
-	public void setRoles(List<RoleDto> roles) {
-		this.roles = roles;
-	}
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 
+    public List<RoleDto> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<RoleDto> roles) {
+        this.roles = roles;
+    }
+
+    public Date getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(Date lastLogin) {
+        this.lastLogin = lastLogin;
+    }
+
+    public Integer getAmountSuccessfulLogins() {
+        return amountSuccessfulLogins;
+    }
+
+    public void setAmountSuccessfulLogins(Integer amountSuccessfulLogins) {
+        this.amountSuccessfulLogins = amountSuccessfulLogins;
+    }
 }

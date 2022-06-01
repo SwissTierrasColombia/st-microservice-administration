@@ -1,10 +1,10 @@
 package com.ai.st.microservice.administration.business;
 
+import com.ai.st.microservice.administration.services.tracing.SCMTracing;
 import com.ai.st.microservice.common.clients.NotifierFeignClient;
 import com.ai.st.microservice.common.dto.notifier.MicroserviceNotificationRecoverAccountDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,10 +12,14 @@ public class NotificationBusiness {
 
     private final Logger log = LoggerFactory.getLogger(NotificationBusiness.class);
 
-    @Autowired
-    private NotifierFeignClient notifierClient;
+    private final NotifierFeignClient notifierClient;
 
-    public void sendNotificationRecoverAccount(String email, String code, String username, String expirationDate, Long userCode) {
+    public NotificationBusiness(NotifierFeignClient notifierClient) {
+        this.notifierClient = notifierClient;
+    }
+
+    public void sendNotificationRecoverAccount(String email, String code, String username, String expirationDate,
+            Long userCode) {
 
         try {
 
@@ -25,13 +29,17 @@ public class NotificationBusiness {
             notification.setUsername(username);
             notification.setExpirationDate(expirationDate);
             notification.setStatus(0);
-            notification.setType("success");
+            notification.setType("recoverAccount");
             notification.setUserCode(userCode);
 
             notifierClient.recoverAccount(notification);
 
         } catch (Exception e) {
-            log.error("Error enviando la notificación #1: " + e.getMessage());
+            String messageError = String.format(
+                    "Error enviando la notificación de recuperación de cuenta al usuario %d : %s", userCode,
+                    e.getMessage());
+            SCMTracing.sendError(messageError);
+            log.error(messageError);
         }
 
     }

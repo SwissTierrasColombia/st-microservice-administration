@@ -11,9 +11,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
 @EnableAutoConfiguration
-@EnableFeignClients(basePackages = {"com.ai.st.microservice.common.clients"})
+@EnableFeignClients(basePackages = { "com.ai.st.microservice.common.clients" })
 @EnableEurekaClient
-@ComponentScan(basePackages = {"com.ai.st.microservice.common.business", "com.ai.st.microservice.administration"})
+@ComponentScan(basePackages = { "com.ai.st.microservice.common.business", "com.ai.st.microservice.administration" })
 public class StMicroserviceAdministrationApplication {
 
     public static void main(String[] args) {

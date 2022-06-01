@@ -21,123 +21,145 @@ import javax.persistence.JoinColumn;
 @Table(name = "users", schema = "administration")
 public class UserEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", nullable = false)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
 
-	@Column(name = "first_name", nullable = false, length = 100)
-	private String firstName;
+    @Column(name = "first_name", nullable = false, length = 100)
+    private String firstName;
 
-	@Column(name = "last_name", nullable = false, length = 100)
-	private String lastName;
+    @Column(name = "last_name", nullable = false, length = 100)
+    private String lastName;
 
-	@Column(name = "username", nullable = false, length = 100, unique = true)
-	private String username;
+    @Column(name = "username", nullable = false, length = 100, unique = true)
+    private String username;
 
-	@Column(name = "email", nullable = false, length = 100)
-	private String email;
+    @Column(name = "email", nullable = false, length = 100)
+    private String email;
 
-	@Column(name = "password", nullable = false, length = 100)
-	private String password;
+    @Column(name = "password", nullable = false, length = 100)
+    private String password;
 
-	@Column(name = "enabled", nullable = false)
-	private Boolean enabled;
+    @Column(name = "enabled", nullable = false)
+    private Boolean enabled;
 
-	@Column(name = "created_at", nullable = false)
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date createdAt;
+    @Column(name = "amount_successful_logins")
+    private Integer amountSuccessfulLogins;
 
-	@Column(name = "updated_at", nullable = true)
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date updatedAt;
+    @Column(name = "created_at", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
 
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "users_x_roles", schema = "administration", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-	List<RoleEntity> roles;
+    @Column(name = "last_login")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastLogin;
 
-	public UserEntity() {
+    @Column(name = "updated_at", nullable = true)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedAt;
 
-	}
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "users_x_roles", schema = "administration", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    List<RoleEntity> roles;
 
-	public Long getId() {
-		return id;
-	}
+    public UserEntity() {
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    }
 
-	public String getFirstName() {
-		return firstName;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getLastName() {
-		return lastName;
-	}
+    public String getFirstName() {
+        return firstName;
+    }
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-	public String getUsername() {
-		return username;
-	}
+    public String getLastName() {
+        return lastName;
+    }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getUsername() {
+        return username;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public Boolean getEnabled() {
-		return enabled;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public void setEnabled(Boolean enabled) {
-		this.enabled = enabled;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public Date getCreatedAt() {
-		return createdAt;
-	}
+    public Boolean getEnabled() {
+        return enabled;
+    }
 
-	public void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
-	}
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
 
-	public Date getUpdatedAt() {
-		return updatedAt;
-	}
+    public Date getCreatedAt() {
+        return createdAt;
+    }
 
-	public void setUpdatedAt(Date updatedAt) {
-		this.updatedAt = updatedAt;
-	}
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
 
-	public List<RoleEntity> getRoles() {
-		return roles;
-	}
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
 
-	public void setRoles(List<RoleEntity> roles) {
-		this.roles = roles;
-	}
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 
+    public List<RoleEntity> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<RoleEntity> roles) {
+        this.roles = roles;
+    }
+
+    public Date getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(Date lastLogin) {
+        this.lastLogin = lastLogin;
+    }
+
+    public Integer getAmountSuccessfulLogins() {
+        return amountSuccessfulLogins;
+    }
+
+    public void setAmountSuccessfulLogins(Integer amountSuccessfulLogins) {
+        this.amountSuccessfulLogins = amountSuccessfulLogins;
+    }
 }

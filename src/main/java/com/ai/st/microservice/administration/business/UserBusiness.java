@@ -12,6 +12,8 @@ import com.ai.st.microservice.administration.exceptions.BusinessException;
 import com.ai.st.microservice.administration.models.services.IRoleService;
 import com.ai.st.microservice.administration.models.services.IUserService;
 
+import com.ai.st.microservice.administration.services.notifier.NotifierChangeEmailService;
+import com.ai.st.microservice.administration.services.tracing.SCMTracing;
 import com.ai.st.microservice.common.business.RoleBusiness;
 import com.ai.st.microservice.common.clients.ManagerFeignClient;
 import com.ai.st.microservice.common.clients.OperatorFeignClient;
@@ -25,12 +27,16 @@ import com.ai.st.microservice.common.dto.providers.MicroserviceProviderRoleDto;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.time.DateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserBusiness {
+
+    private final Logger log = LoggerFactory.getLogger(UserBusiness.class);
 
     @Autowired
     private IUserService userService;
@@ -56,6 +62,9 @@ public class UserBusiness {
     @Autowired
     private OperatorFeignClient operatorClient;
 
+    @Autowired
+    private NotifierChangeEmailService notifierChangeEmailService;
+
     public UserDto getUserByUsername(String username) {
 
         UserDto userDto = null;
@@ -73,6 +82,8 @@ public class UserBusiness {
             userDto.setCreatedAt(userEntity.getCreatedAt());
             userDto.setUpdatedAt(userEntity.getUpdatedAt());
             userDto.setPassword(userEntity.getPassword());
+            userDto.setLastLogin(userEntity.getLastLogin());
+            userDto.setAmountSuccessfulLogins(userEntity.getAmountSuccessfulLogins());
 
             if (userEntity.getRoles().size() > 0) {
                 for (RoleEntity roleEntity : userEntity.getRoles()) {
@@ -102,6 +113,7 @@ public class UserBusiness {
             userDto.setCreatedAt(userEntity.getCreatedAt());
             userDto.setUpdatedAt(userEntity.getUpdatedAt());
             userDto.setPassword(userEntity.getPassword());
+            userDto.setLastLogin(userEntity.getLastLogin());
 
             if (userEntity.getRoles().size() > 0) {
                 for (RoleEntity roleEntity : userEntity.getRoles()) {
@@ -114,8 +126,8 @@ public class UserBusiness {
         return userDto;
     }
 
-    public UserDto createUser(String firstName, String lastName, String password, String email, String username, boolean enabled,
-                              List<Long> roles) throws BusinessException {
+    public UserDto createUser(String firstName, String lastName, String password, String email, String username,
+            boolean enabled, List<Long> roles) throws BusinessException {
 
         email = email.toLowerCase().trim();
         username = username.toLowerCase().trim();
@@ -152,7 +164,7 @@ public class UserBusiness {
         userEntity.setPassword(passwordEncode.encode(password));
         userEntity.setRoles(listRoles);
 
-        userEntity = userService.createUser(userEntity);
+        userEntity = userService.createOrUpdateUser(userEntity);
 
         UserDto userDto = new UserDto();
 
@@ -191,6 +203,7 @@ public class UserBusiness {
             userDto.setEnabled(userEntity.getEnabled());
             userDto.setCreatedAt(userEntity.getCreatedAt());
             userDto.setUpdatedAt(userEntity.getUpdatedAt());
+            userDto.setLastLogin(userEntity.getLastLogin());
             userDto.setPassword(null);
 
             if (userEntity.getRoles().size() > 0) {
@@ -223,6 +236,7 @@ public class UserBusiness {
             userDto.setEnabled(userEntity.getEnabled());
             userDto.setCreatedAt(userEntity.getCreatedAt());
             userDto.setUpdatedAt(userEntity.getUpdatedAt());
+            userDto.setLastLogin(userEntity.getLastLogin());
             userDto.setPassword(null);
 
             if (userEntity.getRoles().size() > 0) {
@@ -246,7 +260,9 @@ public class UserBusiness {
         if (userEntity != null) {
 
             userEntity.setPassword(passwordEncode.encode(newPassword));
-            userEntity = userService.createUser(userEntity);
+            userEntity = userService.createOrUpdateUser(userEntity);
+
+            notifierChangeEmailService.sendNotification(userEntity.getId(), userEntity.getEmail());
 
             userDto = new UserDto();
 
@@ -258,6 +274,7 @@ public class UserBusiness {
             userDto.setEnabled(userEntity.getEnabled());
             userDto.setCreatedAt(userEntity.getCreatedAt());
             userDto.setUpdatedAt(userEntity.getUpdatedAt());
+            userDto.setLastLogin(userEntity.getLastLogin());
             userDto.setPassword(null);
 
             if (userEntity.getRoles().size() > 0) {
@@ -287,7 +304,7 @@ public class UserBusiness {
             userEntity.setEmail(email);
         }
 
-        userEntity = userService.createUser(userEntity);
+        userEntity = userService.createOrUpdateUser(userEntity);
 
         UserDto userDto = new UserDto();
 
@@ -299,6 +316,7 @@ public class UserBusiness {
         userDto.setEnabled(userEntity.getEnabled());
         userDto.setCreatedAt(userEntity.getCreatedAt());
         userDto.setUpdatedAt(userEntity.getUpdatedAt());
+        userDto.setLastLogin(userEntity.getLastLogin());
         userDto.setPassword(null);
 
         return userDto;
@@ -306,7 +324,7 @@ public class UserBusiness {
 
     public UserDto enableUser(Long userId) throws BusinessException {
 
-        UserDto userDto = null;
+        UserDto userDto;
 
         UserEntity userEntity = userService.getUserById(userId);
 
@@ -317,7 +335,7 @@ public class UserBusiness {
         userEntity.setUpdatedAt(new Date());
         userEntity.setEnabled(true);
 
-        userEntity = userService.createUser(userEntity);
+        userEntity = userService.createOrUpdateUser(userEntity);
 
         userDto = new UserDto();
 
@@ -329,6 +347,7 @@ public class UserBusiness {
         userDto.setEnabled(userEntity.getEnabled());
         userDto.setCreatedAt(userEntity.getCreatedAt());
         userDto.setUpdatedAt(userEntity.getUpdatedAt());
+        userDto.setLastLogin(userEntity.getLastLogin());
         userDto.setPassword(null);
 
         if (userEntity.getRoles().size() > 0) {
@@ -342,7 +361,7 @@ public class UserBusiness {
 
     public UserDto disableUser(Long userId) throws BusinessException {
 
-        UserDto userDto = null;
+        UserDto userDto;
 
         UserEntity userEntity = userService.getUserById(userId);
 
@@ -353,7 +372,7 @@ public class UserBusiness {
         userEntity.setUpdatedAt(new Date());
         userEntity.setEnabled(false);
 
-        userEntity = userService.createUser(userEntity);
+        userEntity = userService.createOrUpdateUser(userEntity);
 
         userDto = new UserDto();
 
@@ -365,6 +384,7 @@ public class UserBusiness {
         userDto.setEnabled(userEntity.getEnabled());
         userDto.setCreatedAt(userEntity.getCreatedAt());
         userDto.setUpdatedAt(userEntity.getUpdatedAt());
+        userDto.setLastLogin(userEntity.getLastLogin());
         userDto.setPassword(null);
 
         if (userEntity.getRoles().size() > 0) {
@@ -405,7 +425,8 @@ public class UserBusiness {
             String date = simpleDateFormat.format(expirationDate);
 
             // send email
-            notificationBusiness.sendNotificationRecoverAccount(email, codeEntity.getCode(), userEntity.getUsername(), date, userEntity.getId());
+            notificationBusiness.sendNotificationRecoverAccount(email, codeEntity.getCode(), userEntity.getUsername(),
+                    date, userEntity.getId());
         }
 
     }
@@ -445,13 +466,12 @@ public class UserBusiness {
 
     public List<ManagerUserDto> getManagerUsers(Long managerCode) {
 
-        List<UserEntity> managerUsers =
-                userService.getUserByRoles(new ArrayList<>(Collections.singletonList(RoleBusiness.ROLE_MANAGER)));
+        List<UserEntity> managerUsers = userService
+                .getUserByRoles(new ArrayList<>(Collections.singletonList(RoleBusiness.ROLE_MANAGER)));
 
         List<ManagerUserDto> users = new ArrayList<>();
 
         for (UserEntity userEntity : managerUsers) {
-
 
             MicroserviceManagerDto managerDto = managerClient.findByUserCode(userEntity.getId());
 
@@ -485,8 +505,8 @@ public class UserBusiness {
 
     public List<ProviderUserDto> getProviderUsers(Long providerCode) {
 
-        List<UserEntity> providerUsers =
-                userService.getUserByRoles(new ArrayList<>(Collections.singletonList(RoleBusiness.ROLE_SUPPLY_SUPPLIER)));
+        List<UserEntity> providerUsers = userService
+                .getUserByRoles(new ArrayList<>(Collections.singletonList(RoleBusiness.ROLE_SUPPLY_SUPPLIER)));
 
         List<ProviderUserDto> users = new ArrayList<>();
 
@@ -512,8 +532,11 @@ public class UserBusiness {
                 MicroserviceProviderDto providerDto = providerClient.findProviderByAdministrator(userEntity.getId());
                 providerUserDto.setProvider(providerDto);
                 found = true;
-            } catch (Exception ignored) {
-
+            } catch (Exception e) {
+                String messageError = String.format("Error consultando los roles y el proveedor por el usuario %d : %s",
+                        userEntity.getId(), e.getMessage());
+                SCMTracing.sendError(messageError);
+                log.error(messageError);
             }
 
             try {
@@ -524,8 +547,12 @@ public class UserBusiness {
                 providerUserDto.setProvider(providerDto);
 
                 found = true;
-            } catch (Exception ignored) {
-
+            } catch (Exception e) {
+                String messageError = String.format(
+                        "Error consultando los perfiles y el proveedor por el usuario %d : %s", userEntity.getId(),
+                        e.getMessage());
+                SCMTracing.sendError(messageError);
+                log.error(messageError);
             }
 
             if (found) {
@@ -535,7 +562,8 @@ public class UserBusiness {
         }
 
         if (providerCode != null) {
-            users = users.stream().filter(u -> u.getProvider().getId().equals(providerCode)).collect(Collectors.toList());
+            users = users.stream().filter(u -> u.getProvider().getId().equals(providerCode))
+                    .collect(Collectors.toList());
         }
 
         return users;
@@ -543,13 +571,12 @@ public class UserBusiness {
 
     public List<OperatorUserDto> getOperatorUsers(Long operatorCode) {
 
-        List<UserEntity> managerUsers =
-                userService.getUserByRoles(new ArrayList<>(Collections.singletonList(RoleBusiness.ROLE_OPERATOR)));
+        List<UserEntity> managerUsers = userService
+                .getUserByRoles(new ArrayList<>(Collections.singletonList(RoleBusiness.ROLE_OPERATOR)));
 
         List<OperatorUserDto> users = new ArrayList<>();
 
         for (UserEntity userEntity : managerUsers) {
-
 
             MicroserviceOperatorDto operatorDto = operatorClient.findByUserCode(userEntity.getId());
 
@@ -574,30 +601,50 @@ public class UserBusiness {
         }
 
         if (operatorCode != null) {
-            users = users.stream().filter(u -> u.getOperator().getId().equals(operatorCode)).collect(Collectors.toList());
+            users = users.stream().filter(u -> u.getOperator().getId().equals(operatorCode))
+                    .collect(Collectors.toList());
         }
 
         return users;
     }
 
-    public UserDto entityParseDto(UserEntity userEntity) {
+    public UserDto updateLogin(String username) {
 
-        UserDto userDto = new UserDto();
+        UserDto userDto = null;
 
-        userDto.setId(userEntity.getId());
-        userDto.setFirstName(userEntity.getFirstName());
-        userDto.setLastName(userEntity.getLastName());
-        userDto.setEmail(userEntity.getEmail());
-        userDto.setUsername(userEntity.getUsername());
-        userDto.setEnabled(userEntity.getEnabled());
-        userDto.setCreatedAt(userEntity.getCreatedAt());
-        userDto.setUpdatedAt(userEntity.getUpdatedAt());
-        userDto.setPassword(null);
+        UserEntity userEntity = userService.getUserByUsername(username);
 
-        if (userEntity.getRoles().size() > 0) {
-            for (RoleEntity roleEntity : userEntity.getRoles()) {
-                userDto.getRoles().add(new RoleDto(roleEntity.getId(), roleEntity.getName()));
+        if (userEntity != null) {
+
+            int amountSuccessfulLogins = 1;
+            if (userEntity.getAmountSuccessfulLogins() != null) {
+                amountSuccessfulLogins = userEntity.getAmountSuccessfulLogins() + 1;
             }
+
+            userEntity.setLastLogin(new Date());
+            userEntity.setAmountSuccessfulLogins(amountSuccessfulLogins);
+            userEntity = userService.createOrUpdateUser(userEntity);
+
+            userDto = new UserDto();
+
+            userDto.setId(userEntity.getId());
+            userDto.setFirstName(userEntity.getFirstName());
+            userDto.setLastName(userEntity.getLastName());
+            userDto.setEmail(userEntity.getEmail());
+            userDto.setUsername(userEntity.getUsername());
+            userDto.setEnabled(userEntity.getEnabled());
+            userDto.setCreatedAt(userEntity.getCreatedAt());
+            userDto.setUpdatedAt(userEntity.getUpdatedAt());
+            userDto.setLastLogin(userEntity.getLastLogin());
+            userDto.setAmountSuccessfulLogins(userEntity.getAmountSuccessfulLogins());
+            userDto.setPassword(null);
+
+            if (userEntity.getRoles().size() > 0) {
+                for (RoleEntity roleEntity : userEntity.getRoles()) {
+                    userDto.getRoles().add(new RoleDto(roleEntity.getId(), roleEntity.getName()));
+                }
+            }
+
         }
 
         return userDto;
