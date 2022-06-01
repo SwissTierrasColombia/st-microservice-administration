@@ -1,4 +1,4 @@
-package com.ai.st.microservice.administration.thymeleaf;
+package com.ai.st.microservice.administration.services.thymeleaf;
 
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;

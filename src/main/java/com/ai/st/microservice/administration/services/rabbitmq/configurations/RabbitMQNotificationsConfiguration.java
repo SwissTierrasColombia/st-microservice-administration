@@ -1,8 +1,6 @@
-package com.ai.st.microservice.administration.rabbitmq.configurations;
+package com.ai.st.microservice.administration.services.rabbitmq.configurations;
 
 import org.springframework.amqp.core.*;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -40,11 +38,11 @@ public class RabbitMQNotificationsConfiguration {
         return new Jackson2JsonMessageConverter();
     }
 
-//    @Bean
-//    public AmqpTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
-//        final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-//        rabbitTemplate.setMessageConverter(jsonMessageConverter());
-//        return rabbitTemplate;
-//    }
+    // @Bean
+    // public AmqpTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
+    // final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+    // rabbitTemplate.setMessageConverter(jsonMessageConverter());
+    // return rabbitTemplate;
+    // }
 
 }
